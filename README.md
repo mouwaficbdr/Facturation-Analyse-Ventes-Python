@@ -1,7 +1,3 @@
-Voici ton README nettoyé de tous les `[cite_start]` et `[cite: xx]` :
-
----
-
 # Système de Gestion de Facturation et d'Analyse des Ventes
 
 ## 🚀 Vue d'Ensemble du Projet
