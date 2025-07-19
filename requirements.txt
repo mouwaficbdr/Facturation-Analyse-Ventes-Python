@@ -1,0 +1,45 @@
+# requirements.txt
+#
+# Ce fichier liste toutes les dépendances Python nécessaires pour faire fonctionner ce projet.
+# Il est utilisé pour garantir que nous tous (et les environnements de déploiement)
+# utilisent les mêmes versions des bibliothèques, assurant ainsi la compatibilité et la reproductibilité.
+#
+# --- Comment utiliser ce fichier pour installer les dépendances : ---
+# 1. Assurez-vous d'avoir Python 3.x installé sur votre système.
+# 2. Naviguez jusqu'au répertoire racine de ce projet dans votre terminal.
+# 3. Créez un environnement virtuel (fortement recommandé pour isoler les dépendances du projet) :
+#    python3 -m venv venv
+#    (Sous Windows, cela peut être 'python -m venv venv' ou 'py -m venv venv')
+# 4. Activez l'environnement virtuel :
+#    Sous Linux/macOS: source venv/bin/activate
+#    Sous Windows (cmd.exe): venv\Scripts\activate.bat
+#    Sous Windows (PowerShell): venv\Scripts\Activate.ps1
+#    Si c'est différent chez vous, my bad, faites vos propres recherches pour trouver les bonnes commandes
+# 5. Installez toutes les dépendances listées dans ce fichier :
+#    pip install -r requirements.txt
+#
+# --- Comment mettre à jour ce fichier (si de nouvelles dépendances sont ajoutées ou mises à jour) : ---
+# 1. Assurez-vous que votre environnement virtuel est activé.
+# 2. Exécutez la commande suivante :
+#    pip freeze > requirements.txt
+#    (Cela écrasera le contenu existant avec la liste actuelle des dépendances de votre venv actif)
+#
+# --- Liste des dépendances du projet : ---
+# Les bibliothèques sont listées ci-dessous, avec leur version exacte pour une reproductibilité maximale.
+# nom_librairie==1.2.3
+#
+#pandas==2.3.1      # Bibliothèque principale pour la manipulation de données et l'analyse.
+#openpyxl==3.1.5     # Moteur pour lire et écrire les fichiers .xlsx (Excel).
+#xlrd==2.0.2         # Moteur pour lire les fichiers .xls (anciens formats Excel).
+#Ainsi que toutes leurs dépendances
+
+
+et_xmlfile==2.0.0
+numpy==2.3.1
+openpyxl==3.1.5
+pandas==2.3.1
+python-dateutil==2.9.0.post0
+pytz==2025.2
+six==1.17.0
+tzdata==2025.2
+xlrd==2.0.2
