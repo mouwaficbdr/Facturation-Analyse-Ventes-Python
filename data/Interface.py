@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class myInterface:
+class FacturationApp:
 
     def __init__(self):
         self.root = tk.Tk()
@@ -283,4 +283,4 @@ class myInterface:
     def _unbind_from_mousewheel(self, canvas):
         canvas.unbind_all("<MouseWheel>")
 
-myInterface()
+FacturationApp()
