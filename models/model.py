@@ -19,3 +19,4 @@ class Model:
 
         data.to_excel(writer, startrow=newline, index=False, header=False)
         writer.close()
+

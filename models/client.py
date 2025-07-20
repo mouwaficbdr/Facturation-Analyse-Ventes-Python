@@ -1,6 +1,7 @@
 import pandas as pd
+from model import Model
 
-class Client:
+class Client(Model):
     
     @staticmethod
     def add_client(name, contact, ifu):
