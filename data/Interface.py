@@ -19,10 +19,10 @@ class myInterface:
     def create_header(self):
         header = tk.Frame(self.root, bg="white", padx=10)
         header.pack(fill="x")
-        label = tk.Label(header, text="Application de facturation", font=("Segoe UI", 18, "bold"), bg="white", foreground='black')
+        label = tk.Label(header, text="Application de facturation", font=("Roboto", 18, "bold"), bg="white", foreground='black')
         label.pack(side='left')
         quit_btn = tk.Button(header, text="Quitter l'application", fg="white", bg="#BF3F3F",
-                             font=("Segoe UI", 11, "bold"), relief="solid", borderwidth=1, command=self.root.quit)
+                             font=("Roboto", 11, "bold"), relief="solid", borderwidth=1, command=self.root.quit)
         quit_btn.pack(side="right", padx=15, pady=15)
 
     def create_body(self):
@@ -34,7 +34,7 @@ class myInterface:
 
         self.create_sidebar()
         self.create_board_container()
-        self.show_section(self.boardMotion)  
+        self.show_section(self.StatisquesMotion)  
 
     def create_sidebar(self):
         sidebar = tk.Frame(self.bodyFrame, width=230, background="#F5F5F5")
@@ -98,11 +98,11 @@ class myInterface:
     def boardMotion(self, parent):
         frame1 = tk.Frame(parent,background="#F5F5F5")
         frame1.pack(fill='x')
-        tk.Label(frame1,text='Tableau de bord', font=('Segoe UI', 20, 'bold'),
+        tk.Label(frame1,text='Tableau de bord', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
         frame2 = tk.Frame(parent,background="#F5F5F5")
         frame2.pack(fill='x')
-        tk.Label(frame2,text='Bienvenue dans votre application de facturation', font=('Segoe UI', 12, 'bold'),
+        tk.Label(frame2,text='Bienvenue dans votre application de facturation', font=('Roboto', 12, 'bold'),
                  background='#F5F5F5', foreground='gray').pack(side='left')
         
         frame3 = tk.Frame(parent,background="#F5F5F5")
@@ -129,31 +129,30 @@ class myInterface:
             underframe = tk.Frame(frame3, background='white', bd=1, relief='solid', padx=15, pady=15)
             underframe.grid(column=col_index, row=0, sticky='nsew', padx=10)
 
-
             # Stat title
-            title_label = tk.Label(underframe, text=label, bg='white', font=('Segoe UI', 10), fg='#333')
+            title_label = tk.Label(underframe, text=label, bg='white', font=('Roboto', 10), fg='#333')
             title_label.pack(anchor='center', pady=(10, 0))
         
             # Stat number
-            number_label = tk.Label(underframe, text=value, bg='white', font=('Segoe UI', 16, 'bold'))
+            number_label = tk.Label(underframe, text=value, bg='white', font=('Roboto', 16, 'bold'))
             number_label.pack(anchor='ne')
 
     def fileMotion(self, parent):
-        tk.Label(parent, text='This is the file consulting section', font=('Segoe UI', 20, 'bold'),
+        tk.Label(parent, text='This is the file consulting section', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='black', width=100).pack()
 
     def factureMotion(self, parent):
-        tk.Label(parent, text='This is the facture section', font=('Segoe UI', 20, 'bold'),
+        tk.Label(parent, text='This is the facture section', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='black', padx=10, width=300).pack(fill='x')
 
     def productMotion(self, parent):
         frame1 = tk.Frame(parent,background="#F5F5F5")
         frame1.pack(fill='x')
-        tk.Label(frame1,text='Ajouter un produit', font=('Segoe UI', 20, 'bold'),
+        tk.Label(frame1,text='Ajouter un produit', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
         frame2 = tk.Frame(parent,background="#F5F5F5")
         frame2.pack(fill='x')
-        tk.Label(frame2,text='Ajoutez un nouveau produit à votre catalogue', font=('Segoe UI', 12, 'bold'),
+        tk.Label(frame2,text='Ajoutez un nouveau produit à votre catalogue', font=('Roboto', 12, 'bold'),
                  background='#F5F5F5', foreground='gray').pack(side='left')
         
         frame3 = tk.Frame(parent,background="#F5F5F5")
@@ -162,42 +161,108 @@ class myInterface:
         form_frame.pack(pady=30, padx=30, fill="both")
 
         #  Titre
-        titre = tk.Label(form_frame, text="Nouveau produit", font=("Segoe UI", 16, "bold"), bg="white", anchor="w")
+        titre = tk.Label(form_frame, text="Nouveau produit", font=("Roboto", 16, "bold"), bg="white", anchor="w")
         titre.pack(anchor="w")
 
-        soustitre = tk.Label(form_frame, text="Remplissez les informations du produit", font=("Segoe UI", 10),
+        soustitre = tk.Label(form_frame, text="Remplissez les informations du produit", font=("Roboto", 10),
                             bg="white", fg="gray", pady=10)
         soustitre.pack(anchor="w")
 
         # Code produit 
-        code_label = tk.Label(form_frame, text="Code produit", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        code_label = tk.Label(form_frame, text="Code produit", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         code_label.pack(anchor="w", pady=(5, 0))
 
-        code_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        code_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
         code_input.pack(fill='x', pady=(0, 10))
 
         # Libellé 
-        libelle_label = tk.Label(form_frame, text="Libellé", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        libelle_label = tk.Label(form_frame, text="Libellé", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         libelle_label.pack(anchor="w", pady=(5, 0))
 
-        libelle_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        libelle_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
         libelle_input.pack(fill='x', pady=(0, 10))
 
-        # ---- Prix unitaire ----
-        prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        # Prix unitaire
+        prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         prix_label.pack(anchor="w", pady=(5, 0))
 
-        prix_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        prix_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
         prix_input.pack(fill='x', pady=(0, 15))
 
-        # ---- Bouton Ajouter ----
+        # Bouton Ajouter
         ajouter_btn = tk.Button(form_frame, text=" +  Ajouter le produit", bg="black", fg="white",
-                                font=("Segoe UI", 10, "bold"), padx=10, pady=10, relief="flat", cursor="hand2")
+                                font=("Roboto", 10, "bold"), padx=10, pady=10, relief="flat", cursor="hand2")
         ajouter_btn.pack(fill='x')
 
     def StatisquesMotion(self, parent):
-        tk.Label(parent, text='This is the global statistiques section', font=('Segoe UI', 20, 'bold'),
-                 background='#F5F5F5', foreground='black').pack()
+        frame1 = tk.Frame(parent,background="#F5F5F5")
+        frame1.pack(fill='x')
+        tk.Label(frame1,text='Statistiques de ventes', font=('Roboto', 20, 'bold'),
+                 background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
+        frame2 = tk.Frame(parent,background="#F5F5F5")
+        frame2.pack(fill='x')
+        tk.Label(frame2,text='Analysez vos performances commerciales', font=('Roboto', 12, 'bold'),
+                 background='#F5F5F5', foreground='gray').pack(side='left')
+        
+        frame3 = tk.Frame(parent,background="#F5F5F5")
+        frame3.pack(fill='x',padx=20,pady=20)
+
+        # variables de statisques
+        salesStats ={
+            'produits le plus vendu' : 'Ordinateur portable',
+            'Meilleur client' : 'Entreprise ABC',
+            "Chiffre d'affaires total" : '$15,420'
+        }
+
+        for col_index, (label, value) in enumerate(salesStats.items()):
+            underframe = tk.Frame(frame3, background='white', bd=1, relief='solid', padx=15, pady=15)
+            underframe.grid(column=col_index, row=0, sticky='nsew', padx=10)
+
+            # Stat title
+            title_label = tk.Label(underframe, text=label, bg='white', font=('Roboto', 11), fg='#333')
+            title_label.pack(anchor='w', pady=(10, 0))
+        
+            # Stat number
+            number_label = tk.Label(underframe, text=value, bg='white', font=('Roboto', 16, 'bold'))
+            number_label.pack(anchor='ne')
+
+        frame4 =tk.Frame(parent,bg='white',height=5,padx=20, pady=20)
+        frame4.pack(fill='both', padx=20, pady=20)
+        # Titre
+        tk.Label(frame4, text="Répartition des ventes par client", bg='white',
+                font=('Roboto', 14, 'bold'), anchor='w').pack(fill='x', pady=(0, 10))
+
+        # Données dictionnaire
+        clientStats = {
+            'Entreprise ABC': {'commande': 12, 'ca': '€8,500'},
+            'Société XYZ': {'commande': 8, 'ca': '€4,200'},
+            'Sarl Martin': {'commande': 5, 'ca': '€2,720'},
+        }
+
+        # En-têtes
+        headers = ["Client", "Nombre de commandes", "Chiffre d'affaires"]
+        table = tk.Frame(frame4, bg='white')
+        table.pack(fill='both')
+
+        for col, header in enumerate(headers):
+            tk.Label(table, text=header, font=('Roboto', 10, 'bold'),
+                    bg='white', fg='gray', padx=10, anchor='w').grid(row=0, column=col, sticky='ew')
+
+        # Ligne horizontale sous les entêtes
+        tk.Frame(table, height=1, bg='#ddd').grid(row=1, column=0, columnspan=3, sticky='ew', pady=(2, 5))
+
+        # Ajout des lignes de données depuis le dictionnaire
+        for row_index, (client, data) in enumerate(clientStats.items(), start=2):
+            tk.Label(table, text=client, font=('Roboto', 10),
+                    bg='white', fg='black', padx=10, anchor='w').grid(row=row_index, column=0, sticky='ew', pady=4)
+
+            tk.Label(table, text=data['commande'], font=('Roboto', 10),
+                    bg='white', fg='black', padx=10, anchor='w').grid(row=row_index, column=1, sticky='ew', pady=4)
+
+            tk.Label(table, text=data['ca'], font=('Roboto', 10, 'bold'),
+                    bg='white', fg='black', padx=10, anchor='w').grid(row=row_index, column=2, sticky='ew', pady=4)
+        
+
 
     def on_click(self, section_function, clicked_button):
         # Met à jour le style des boutons
