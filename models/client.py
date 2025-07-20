@@ -1,23 +1,28 @@
 import pandas as pd
-from model import Model
+from models.model import Model
 
 class Client(Model):
     
-    def __init__(self, name, contact, ifu, file):
-        if(type(contact) != int):
+    def __init__(self, name, contact, ifu, file = "Clients.xlsx"):
+        if type(contact) != int:
             raise ClientDataError(f"Le contat {contact} n'est pas correcte.")
         
-        if(len(str(contact)) != 9):
+        if len(str(contact)) != 9:
             raise ClientDataError(f"Le numéro {contact} doit être un numéro à 9 chiffres.")
         
-        if(type(ifu) != int):
+        if type(ifu) != int:
             raise ClientIFUError(f"Le numéro IFU {ifu} n'est pas correcte")
         
-        if(len(str(ifu)) != 13):
+        if len(str(ifu)) != 13:
             raise ClientIFUError(f"Le numéro IFU {ifu} doit être à 13 chiffres")
         
+        clients_ifu = self._get_datas()['IFU']
+        print(clients_ifu)
+        if not clients_ifu[clients_ifu == ifu].empty:
+            raise ClientIFUError(f"Le numéro IFU {ifu} existe déjà (Vous êtes suspect !!).")
+        
         new_client = pd.DataFrame({
-            'code_client': [self.create_code_client()],
+            'code_client': [self.__create_code_client()],
             'nom': [name],
             'contact': [contact],
             'IFU': [ifu]
@@ -25,11 +30,12 @@ class Client(Model):
 
         self._add_data(new_client, file)
 
-        
-    def create_code_client(self):
+
+
+    def __create_code_client(self):
         clients = self._get_datas()
         
-        last_code = clients['code_client'].tail(1)
+        last_code = clients['code_client'].iloc[-1]
 
         last_number = int(last_code.strip('C'))
         new_client_code = ""

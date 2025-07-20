@@ -12,16 +12,17 @@ class Model:
 
         # Find the active/good sheet
         ws = wb.active
+        
 
         newline = ws.max_row
 
-        writer = pd.ExcelWriter(workfile, engine='openpyxl', if_sheet_exists=ws, mode="a")
+        writer = pd.ExcelWriter(workfile, engine='openpyxl', mode="a", if_sheet_exists='overlay')
 
-        data.to_excel(writer, startrow=newline, index=False, header=False)
+        data.to_excel(writer, sheet_name=ws.title, startrow=newline, index=False, header=False)
         writer.close()
 
 
-    def _get_datas(self, file):
+    def _get_datas(self, file = "Clients.xlsx"):
         workfile = f"{self._WORK_DIR}/{file}"
 
         df_data = pd.read_excel(workfile)
