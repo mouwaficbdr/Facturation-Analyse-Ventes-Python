@@ -1,259 +1,174 @@
 import pandas as pd
 from datetime import datetime
 import os
-import sys
 
-class InvoiceManager:
-    def __init__(self, data_folder="export"):
-        """Initialize the invoice manager with a specific data folder"""
-        # Create folder if it doesn't exist
+class FactureManager:
+    def __init__(self, data_folder="data"):
+        """Initialise le gestionnaire de factures"""
         os.makedirs(data_folder, exist_ok=True)
+        self.INVOICES_FILE = os.path.join(data_folder, "historique_factures.xlsx")
+        self._initialize_invoices_file()
         
-        # Set the file path
-        self.INVOICE_FILE = os.path.join(data_folder, "historique_factures.xlsx")
-        self.initialize_file()
-        
-        # Menu dictionary
-        self.menus = {
-            'main': {
-                '1': {'text': 'Add invoice', 'action': self.add_invoice_interface},
-                '2': {'text': 'Show all invoices', 'action': self.show_all_invoices},
-                '3': {'text': 'Search by client', 'action': self.search_by_client_interface},
-                '4': {'text': 'Search by date', 'action': self.search_by_date_interface},
-                '5': {'text': 'Exit', 'action': self.exit_program}
-            }
-        }
-
-    def initialize_file(self):
-        """Create the Excel file with required columns if it doesn't exist"""
-        if not os.path.exists(self.INVOICE_FILE):
+    def _initialize_invoices_file(self):
+        """Crée le fichier d'historique des factures s'il n'existe pas"""
+        if not os.path.exists(self.INVOICES_FILE):
             columns = [
-                "Invoice_number",
-                "Date",
-                "Client",
-                "Product_code",
-                "Products",
-                "Quantity",
-                "Unit_price",
-                "Amount_HT",
-                "VAT",
-                "Amount_TTC"
+                "numero_facture",
+                "date",
+                "code_client",
+                "nom_client",
+                "produits",
+                "quantites",
+                "prix_unitaire",
+                "total_ht",
+                "remise",
+                "tva",
+                "total_ttc"
             ]
-            try:
-                pd.DataFrame(columns=columns).to_excel(
-                    self.INVOICE_FILE, 
-                    index=False, 
-                    engine='openpyxl'
-                )
-                print(f"File created successfully: {self.INVOICE_FILE}")
-            except PermissionError:
-                print(f"Error: Cannot create file. Permission denied for {self.INVOICE_FILE}")
-                sys.exit(1)
-            except Exception as e:
-                print(f"Unexpected error creating file: {str(e)}")
-                sys.exit(1)
+            pd.DataFrame(columns=columns).to_excel(self.INVOICES_FILE, index=False)
 
-    def add_invoice(self, invoice_number, client, products_details):
+    def ajouter_facture(self, numero_facture,remise, client, produits):
         """
-        Add a new invoice to the system
-        :param invoice_number: Invoice number (str)
-        :param client: Client name (str)
-        :param products_details: List of dictionaries containing products
+        Ajoute une facture à l'historique
+        :param numero_facture: Numéro unique de facture
+        :param client: Dictionnaire contenant les infos client
+        :param produits: Liste de dictionnaires des produits
         """
         try:
-            # Calculate amounts
-            amount_ht = sum(p['quantity'] * p['unit_price'] for p in products_details)
-            vat = amount_ht * 0.2  # VAT at 20%
-            amount_ttc = amount_ht + vat
+            # Calcul des montants
+            total_ht = sum(p['quantite'] * p['prix'] for p in produits)
+            tht_remise = total_ht * (1 - remise/100)
+            tva = tht_remise * 0.18
+            total_ttc = tht_remise + tva
 
-            # Prepare data
-            new_invoice = {
-                "Invoice_number": invoice_number,
-                "Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "Client": client,
-                "Product_code": ";".join(str(p['code']) for p in products_details),
-                "Products": ";".join(p['name'] for p in products_details),
-                "Quantity": ";".join(str(p['quantity']) for p in products_details),
-                "Unit_price": ";".join(f"{p['unit_price']:.2f}" for p in products_details),
-                "Amount_HT": f"{amount_ht:.2f}",
-                "VAT": f"{vat:.2f}",
-                "Amount_TTC": f"{amount_ttc:.2f}"
+            # Préparation des données
+            nouvelle_facture = {
+                "numero_facture": numero_facture,
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "code_client": client['code'],
+                "nom_client": client['nom'],
+                "produits": ";".join(p['code'] for p in produits),
+                "quantites": ";".join(str(p['quantite']) for p in produits),
+                "prix_unitaire": ";".join(f"{p['prix']:.2f}" for p in produits),
+                "total_ht": f"{total_ht:.2f}",
+                "remise": f"{remise}%",
+                "tva": f"{tva:.2f}",
+                "total_ttc": f"{total_ttc:.2f}"
             }
 
-            # Read and update file
-            df = pd.read_excel(self.INVOICE_FILE, engine='openpyxl')
-            df = pd.concat([df, pd.DataFrame([new_invoice])], ignore_index=True)
-            
-            # Save with improved Excel formatting
-            with pd.ExcelWriter(self.INVOICE_FILE, engine='openpyxl') as writer:
-                df.to_excel(writer, index=False)
-                worksheet = writer.sheets['Sheet1']
-                
-                # Add auto-filters
-                worksheet.auto_filter.ref = worksheet.dimensions
-                
-                # Adjust column width
-                for column in worksheet.columns:
-                    max_length = max(len(str(cell.value)) for cell in column)
-                    worksheet.column_dimensions[column[0].column_letter].width = max_length + 2
+            # Mise à jour du fichier
+            df = pd.read_excel(self.INVOICES_FILE)
+            df = pd.concat([df, pd.DataFrame([nouvelle_facture])], ignore_index=True)
+            df.to_excel(self.INVOICES_FILE, index=False)
 
-            print(f"\nInvoice {invoice_number} added successfully for {client} (Total TTC: {amount_ttc:.2f}€)")
-
+            return True
         except Exception as e:
-            print(f"\nError adding invoice: {str(e)}")
+            print(f"Erreur lors de l'ajout de la facture : {str(e)}")
+            return False
 
-    def show_all_invoices(self):
-        """Display all invoices with improved formatting"""
+    def _calculer_remise(self, code_client, montant):
+        """Calcule la remise selon les règles métier"""
+        # Implémentez ici votre logique de calcul de remise
+        return 0  # Par défaut, pas de remise
+
+    def afficher_historique_complet(self):
+        """Affiche toutes les factures avec un formatage clair"""
         try:
-            df = pd.read_excel(self.INVOICE_FILE, engine='openpyxl')
+            df = pd.read_excel(self.INVOICES_FILE)
             
             if df.empty:
-                print("\nNo invoices found.")
+                print("\nAucune facture dans l'historique.")
                 return
 
-            print("\n=== ALL INVOICES ===")
+            print("\n=== HISTORIQUE COMPLET DES FACTURES ===")
+            print(f"Nombre total de factures : {len(df)}")
+            print(f"Chiffre d'affaires total : {df['total_ttc'].astype(float).sum():.2f}€\n")
             
-            # Sort by date descending
-            df = df.sort_values('Date', ascending=False)
+            # Tri par date décroissante
+            df = df.sort_values('date', ascending=False)
             
-            # Improved formatting
+            # Formatage amélioré
             pd.set_option('display.max_columns', None)
             pd.set_option('display.width', 1000)
-            pd.set_option('display.colheader_justify', 'center')
             
-            print(df.to_string(index=False))
-            print(f"\nTotal invoices: {len(df)}")
-            print(f"Global amount TTC: {df['Amount_TTC'].astype(float).sum():.2f}€")
-
+            print(df[['numero_facture', 'date', 'nom_client', 'total_ttc']].to_string(index=False))
+            
         except Exception as e:
-            print(f"\nError reading invoices: {str(e)}")
+            print(f"\nErreur lors de la lecture de l'historique : {str(e)}")
 
-    def search_by_client(self, client):
-        """Display invoices for a specific client"""
+    def afficher_factures_client(self, code_client):
+        """Affiche l'historique des factures pour un client spécifique"""
         try:
-            df = pd.read_excel(self.INVOICE_FILE, engine='openpyxl')
-            client_invoices = df[df['Client'].str.lower() == client.lower()]
+            df = pd.read_excel(self.INVOICES_FILE)
+            df_client = df[df['code_client'] == code_client]
             
-            if client_invoices.empty:
-                print(f"\nNo invoices found for client: {client}")
+            if df_client.empty:
+                print(f"\nAucune facture trouvée pour le client {code_client}.")
                 return
 
-            print(f"\n=== INVOICES FOR {client.upper()} ===")
+            client_name = df_client.iloc[0]['nom_client']
+            print(f"\n=== FACTURES POUR {client_name.upper()} ===")
+            print(f"Nombre de factures : {len(df_client)}")
+            print(f"Total dépensé : {df_client['total_ttc'].astype(float).sum():.2f}€\n")
             
-            # Sort and format
-            client_invoices = client_invoices.sort_values('Date', ascending=False)
-            print(client_invoices[['Invoice_number', 'Date', 'Amount_TTC']].to_string(index=False))
+            # Tri par date décroissante
+            df_client = df_client.sort_values('date', ascending=False)
             
-            print(f"\nTotal invoices: {len(client_invoices)}")
-            print(f"Total amount: {client_invoices['Amount_TTC'].astype(float).sum():.2f}€")
-
+            # Affichage détaillé
+            for _, facture in df_client.iterrows():
+                print(f"Facture n°{facture['numero_facture']} - {facture['date']}")
+                print(f"Montant TTC : {facture['total_ttc']}€")
+                print("Produits :")
+                
+                # Détail des produits
+                produits = facture['produits'].split(';')
+                quantites = facture['quantites'].split(';')
+                prix = facture['prix_unitaire'].split(';')
+                
+                for p, q, px in zip(produits, quantites, prix):
+                    print(f"  - {p} : {q} x {px}€")
+                
+                print(f"Remise : {facture['remise']}")
+                print("-" * 40)
+                
         except Exception as e:
-            print(f"\nError during search: {str(e)}")
+            print(f"\nErreur lors de la recherche : {str(e)}")
 
-    def search_by_date(self, date):
-        """Display invoices for a specific date"""
+    def afficher_facture_detaillee(self, numero_facture):
+        """Affiche une facture spécifique en détail"""
         try:
-            df = pd.read_excel(self.INVOICE_FILE, engine='openpyxl')
-            df['Date_only'] = pd.to_datetime(df['Date']).dt.date
-            search_date = datetime.strptime(date, "%Y-%m-%d").date()
+            df = pd.read_excel(self.INVOICES_FILE)
+            facture = df[df['numero_facture'] == numero_facture]
             
-            date_invoices = df[df['Date_only'] == search_date]
-            
-            if date_invoices.empty:
-                print(f"\nNo invoices found for date: {date}")
+            if facture.empty:
+                print(f"\nFacture {numero_facture} introuvable.")
                 return
 
-            print(f"\n=== INVOICES FOR {date} ===")
-            print(date_invoices.to_string(index=False))
+            facture = facture.iloc[0]
+            print("\n" + "=" * 50)
+            print(f"FACTURE N° {facture['numero_facture']}".center(50))
+            print("=" * 50)
+            print(f"Date : {facture['date']}")
+            print(f"Client : {facture['nom_client']} (Code: {facture['code_client']})")
+            print("-" * 50)
+            print("DÉTAIL DES PRODUITS:")
             
-            print(f"\nTotal invoices: {len(date_invoices)}")
-            print(f"Total amount: {date_invoices['Amount_TTC'].astype(float).sum():.2f}€")
-
-        except ValueError:
-            print("\nInvalid date format. Use YYYY-MM-DD.")
+            # Affichage du tableau des produits
+            produits = facture['produits'].split(';')
+            quantites = facture['quantites'].split(';')
+            prix = facture['prix_unitaire'].split(';')
+            
+            
+            for p, q, px in zip(produits, quantites, prix):
+                total = float(q) * float(px)
+                print(f"| {p:11} | {q:8} | {float(px):13.2f}€ | {total:8.2f}€ |")
+            
+            print("\n" + "-" * 50)
+            print(f"Total HT: {facture['total_ht']}€")
+            print(f"Remise: {facture['remise']}")
+            print(f"TVA (18%): {facture['tva']}€")
+            print(f"Total TTC: {facture['total_ttc']}€")
+            print("=" * 50 + "\n")
+            
         except Exception as e:
-            print(f"\nError during search: {str(e)}")
-
-    # User interfaces
-    def add_invoice_interface(self):
-        print("\n--- NEW INVOICE ---")
-        invoice_number = input("Invoice number: ").strip()
-        client = input("Client: ").strip()
-        
-        products = []
-        while True:
-            print("\nAdd a product (leave blank to finish):")
-            code = input("Product code: ").strip()
-            if not code:
-                break
-                
-            name = input("Product name: ").strip()
-            try:
-                quantity = int(input("Quantity: ").strip())
-                price = float(input("Unit price (excl. tax): ").strip())
-            except ValueError:
-                print("Error: quantity and price must be numbers")
-                continue
-                
-            products.append({
-                'code': code,
-                'name': name,
-                'quantity': quantity,
-                'unit_price': price
-            })
-        
-        if not products:
-            print("Cancelled: no products added")
-            return
-            
-        self.add_invoice(invoice_number, client, products)
-
-    def search_by_client_interface(self):
-        client = input("\nEnter client name: ").strip()
-        if client:
-            self.search_by_client(client)
-        else:
-            print("Invalid client name")
-
-    def search_by_date_interface(self):
-        date = input("\nEnter date (YYYY-MM-DD): ").strip()
-        if date:
-            self.search_by_date(date)
-        else:
-            print("Invalid date")
-
-    def exit_program(self):
-        print("\nThank you for using the invoice management system. Goodbye!")
-        sys.exit()
-
-    def show_menu(self, menu_type):
-        print("\n" + "="*50)
-        print("INVOICE MANAGEMENT SYSTEM".center(50))
-        print("="*50)
-        
-        menu = self.menus.get(menu_type, {})
-        for key, item in menu.items():
-            print(f"{key}. {item['text']}")
-        
-        print("="*50)
-
-    def run(self):
-        """Main application entry point"""
-        while True:
-            self.show_menu('main')
-            choice = input("Your choice (1-5): ").strip()
-            
-            action = self.menus['main'].get(choice, {}).get('action')
-            if action:
-                action()
-            else:
-                print("\nInvalid choice. Please select an option between 1 and 5.")
-
-if __name__ == "__main__":
-    # Create with default folder
-    manager = InvoiceManager()
-    
-    # Or specify custom folder:
-    # manager = InvoiceManager(data_folder="my_invoices_folder")
-    
-    manager.run()
+            print(f"\nErreur lors de l'affichage : {str(e)}")
