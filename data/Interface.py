@@ -147,8 +147,53 @@ class myInterface:
                  background='#F5F5F5', foreground='black', padx=10, width=300).pack(fill='x')
 
     def productMotion(self, parent):
-        tk.Label(parent, text='This is the Product management section', font=('Segoe UI', 20, 'bold'),
-                 background='#F5F5F5', foreground='black').pack()
+        frame1 = tk.Frame(parent,background="#F5F5F5")
+        frame1.pack(fill='x')
+        tk.Label(frame1,text='Ajouter un produit', font=('Segoe UI', 20, 'bold'),
+                 background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
+        frame2 = tk.Frame(parent,background="#F5F5F5")
+        frame2.pack(fill='x')
+        tk.Label(frame2,text='Ajoutez un nouveau produit à votre catalogue', font=('Segoe UI', 12, 'bold'),
+                 background='#F5F5F5', foreground='gray').pack(side='left')
+        
+        frame3 = tk.Frame(parent,background="#F5F5F5")
+        frame3.pack(fill='x',padx=20,pady=20)
+        form_frame = tk.Frame(frame3, bg="white", padx=20, pady=20, highlightbackground="#CCC", highlightthickness=1)
+        form_frame.pack(pady=30, padx=30, fill="both")
+
+        #  Titre
+        titre = tk.Label(form_frame, text="Nouveau produit", font=("Segoe UI", 16, "bold"), bg="white", anchor="w")
+        titre.pack(anchor="w")
+
+        soustitre = tk.Label(form_frame, text="Remplissez les informations du produit", font=("Segoe UI", 10),
+                            bg="white", fg="gray", pady=10)
+        soustitre.pack(anchor="w")
+
+        # Code produit 
+        code_label = tk.Label(form_frame, text="Code produit", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        code_label.pack(anchor="w", pady=(5, 0))
+
+        code_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        code_input.pack(fill='x', pady=(0, 10))
+
+        # Libellé 
+        libelle_label = tk.Label(form_frame, text="Libellé", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        libelle_label.pack(anchor="w", pady=(5, 0))
+
+        libelle_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        libelle_input.pack(fill='x', pady=(0, 10))
+
+        # ---- Prix unitaire ----
+        prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Segoe UI", 9, "bold"), bg="white", anchor="w")
+        prix_label.pack(anchor="w", pady=(5, 0))
+
+        prix_input = tk.Text(form_frame, height=1, font=("Segoe UI", 10), bd=1, relief="solid")
+        prix_input.pack(fill='x', pady=(0, 15))
+
+        # ---- Bouton Ajouter ----
+        ajouter_btn = tk.Button(form_frame, text=" +  Ajouter le produit", bg="black", fg="white",
+                                font=("Segoe UI", 10, "bold"), padx=10, pady=10, relief="flat", cursor="hand2")
+        ajouter_btn.pack(fill='x')
 
     def StatisquesMotion(self, parent):
         tk.Label(parent, text='This is the global statistiques section', font=('Segoe UI', 20, 'bold'),
