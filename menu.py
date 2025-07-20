@@ -4,13 +4,13 @@ import os
 import sys
 
 class InvoiceManager:
-    def __init__(self, data_folder="invoices_data"):
+    def __init__(self, data_folder="export"):
         """Initialize the invoice manager with a specific data folder"""
         # Create folder if it doesn't exist
         os.makedirs(data_folder, exist_ok=True)
         
         # Set the file path
-        self.INVOICE_FILE = os.path.join(data_folder, "invoices_history.xlsx")
+        self.INVOICE_FILE = os.path.join(data_folder, "historique_factures.xlsx")
         self.initialize_file()
         
         # Menu dictionary
