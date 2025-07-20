@@ -3,11 +3,11 @@ from openpyxl import load_workbook
 
 class Model:
 
-    _WORK_DIR = "./data/"
+    _WORK_DIR = "./data"
 
     # Mise en place de la fonction d'insertion de données dans un fichier
-    def add_data(self, data, file):
-        workfile = self._WORK_DIR + file
+    def _add_data(self, data, file):
+        workfile = f"{self._WORK_DIR}/{file}"
         wb = load_workbook(workfile)
 
         # Find the active/good sheet
@@ -19,4 +19,12 @@ class Model:
 
         data.to_excel(writer, startrow=newline, index=False, header=False)
         writer.close()
+
+
+    def _get_datas(self, file):
+        workfile = f"{self._WORK_DIR}/{file}"
+
+        df_data = pd.read_excel(workfile)
+
+        return df_data
 
