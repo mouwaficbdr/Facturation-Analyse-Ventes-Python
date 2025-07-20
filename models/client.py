@@ -3,7 +3,7 @@ from model import Model
 
 class Client(Model):
     
-    def __init__(self, name, contact, ifu):
+    def __init__(self, name, contact, ifu, file):
         if(type(contact) != int):
             raise ClientDataError(f"Le contat {contact} n'est pas correcte.")
         
@@ -23,12 +23,8 @@ class Client(Model):
             'IFU': [ifu]
         })
 
-        self._add_data(new_client, "Clients.xlsx")
-        
+        self._add_data(new_client, file)
 
-        
-
-        
         
     def create_code_client(self):
         clients = self._get_datas()
