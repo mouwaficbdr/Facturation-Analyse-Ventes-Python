@@ -14,4 +14,4 @@ class Products (Model):
 
 
 # Test rapide de création d'entrée et affichage de toutes entrées au format JSON, venez me taper!
-# print((Products('Argent', 450)).getAllProducts())
+# print((Products()).getAllProducts())

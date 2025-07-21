@@ -1,8 +1,18 @@
 from multiprocessing.connection import Client
 import tkinter as tk
 from tkinter.font import BOLD
-from produits_model import Products 
-# from 
+from produits_model import Products
+from tkinter import messagebox
+from clients_model import Client
+from services.statistics_service import StatisticsService
+
+statis = StatisticsService(
+    'exports/historique_factures .xlsx',
+    'data/Clients.xlsx',
+    'data/Produits.xlsx',
+    'data/CartesReduction.xlsx'
+)
+
 
 class FacturationApp:
 
@@ -124,10 +134,10 @@ class FacturationApp:
         underframe.rowconfigure(1,weight=1)
 
         stats = {
-            'Total clients' : 3,
-            'Produits' : 4,
-            'Cartes de réduction' : 3,
-            'CA Total' : '$1500' 
+            'Total clients' : statis.total_clients(),
+            'Produits' : statis.total_products(),
+            'Cartes de réduction' : statis.total_discount_cards(),
+            'CA Total' : statis.total_revenue() + ' FCFA' 
         }
 
         for col_index, (label, value) in enumerate(stats.items()):
@@ -246,20 +256,11 @@ class FacturationApp:
         btnManager=[
             {
                 'content':'Clients',
-                'function': lambda: self.renderFileContent(frame4, 'Liste des clients', ['Code_client', 'Nom', 'Contact', 'IFU'], [{
-                    'Code_client': 1,
-                    'Nom': 'Blaise',
-                    'Contact': 5425216,
-                    'IFU': 785623
-                }])
+                'function': lambda: self.renderFileContent(frame4, 'Liste des clients', ['code_client', 'nom', 'contact', 'IFU'],Client().getallClients()) 
             },
             {
                 'content':'Produits',
-                'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_Produit', 'Libellé', 'Prix unitaire'], [{
-                    'Code_Produit' :'P001',
-                    'Libellé' : 'Ordinateur portable',
-                    'Prix unitaire' :'€800'
-                }])
+                'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['code_produit', 'libelle', 'prix_unitaire'], Products().getAllProducts())
             },
             {
                 'content':'Cartes de réductions',
@@ -304,9 +305,8 @@ class FacturationApp:
 
         # tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
 
-        frame=tk.Frame(starterFrame)
-        frame.pack(fill='x', anchor='w')
-        frame.pack(fill='x', anchor='w')
+        frame=tk.Frame(starterFrame,pady=10,padx=10)
+        frame.pack(fill='x', anchor='w',padx=20,pady=20)
 
         for i in range(len(header)):
             frame.grid_columnconfigure(i, weight=1)
@@ -792,9 +792,9 @@ class FacturationApp:
         ajouter_btn.pack(fill='x')
 
     def createProduct(self):
-        print(self.libelle_input.get('1.0',tk.END))
-        # print(self.code_input.get('1.0',tk.END))
-        print(self.prix_input.get('1.0',tk.END))
+        product = Products(self.libelle_input.get('1.0',tk.END),self.prix_input.get('1.0',tk.END))
+        messagebox.showinfo('Création dun produit',message='le produit '+ self.libelle_input.get('1.0',tk.END) +' a été créer !')
+        self.show_section(self.productMotion)
         
 
     def StatisquesMotion(self, parent):
@@ -887,3 +887,4 @@ class FacturationApp:
         canvas.unbind_all("<MouseWheel>")
 
 FacturationApp()
+# print(Client().getallClients())
