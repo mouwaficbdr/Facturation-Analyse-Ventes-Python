@@ -1,13 +1,14 @@
 from multiprocessing.connection import Client
 import tkinter as tk
 from tkinter.font import BOLD
-from produits_model import Products
+# from produits_model import Products
 from tkinter import messagebox
 from clients_model import Client
 from statistics_service import StatisticsService
 
+
 statis = StatisticsService(
-    'exports/historique_factures .xlsx',
+    'exports/historique_factures.xlsx',
     'data/Clients.xlsx',
     'data/Produits.xlsx',
     'data/CartesReduction.xlsx'

@@ -1,5 +1,3 @@
-
-from pickle import NONE
 import pandas as p
 from openpyxl import load_workbook
 from model import Model
