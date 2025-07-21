@@ -1,8 +1,4 @@
-from models.client import Client, ClientIFUError, ClientDataError
+from models.facture import PDF
 
-try:
-    andy = Client('Andy', 900993248, 1234567890769)
-    
-
-except ClientIFUError as e:
-    print(f"Erreur: {e}")
+pdf1 = PDF()
+pdf1.generatePDF()
