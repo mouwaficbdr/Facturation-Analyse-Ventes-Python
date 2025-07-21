@@ -492,18 +492,18 @@ class FactureManager:
     
     
     #Fonction pour les calcules
-    def calcul_remise(total_ht, remise_pourcent):
+    def calcul_remise(self, total_ht, remise_pourcent):
         #Calcule le montant de la remise
         return total_ht * (remise_pourcent / 100)
 
-    def montant_ht_apres_remise(total_ht, remise_pourcent):
+    def montant_ht_apres_remise(self, total_ht, remise_pourcent):
         #Calcule le montant HT après remise.
-        return total_ht - calcul_remise(total_ht, remise_pourcent)
+        return total_ht - self.calcul_remise(total_ht, remise_pourcent)
 
-    def montant_tva(THT_remise, tva_pourcent=18):
+    def montant_tva(self, THT_remise, tva_pourcent=18):
         #Calcule le montant de la TVA sur le HT après remise.
         return THT_remise * (tva_pourcent / 100)
 
-    def montant_ttc(THT_remise, tva_pourcent=18):
+    def montant_ttc(self, THT_remise, tva_pourcent=18):
         #Calcule le montant TTC (HT après remise + TVA).
-        return THT_remise + montant_tva(THT_remise, tva_pourcent)
+        return THT_remise + self.montant_tva(THT_remise, tva_pourcent)
