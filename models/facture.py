@@ -169,7 +169,28 @@ class FactureManager:
 
 
     def generatePDF(self, code_client):
-        client = self.get_factures_client(code_client)
+        client = self.get_client_info(code_client)
+        client_factures = self.get_factures_client(code_client)
+
+        list_produit = ""
+        for produit in client_factures:
+            list_produit += f"""<tr>
+                                    <td>{produit.produits}</td>
+                                    <td>{produit.quantites}</td>
+                                    <td>{produit.prix_unitaire}</td>
+                                    <td>{produit.montant_ht} FCFA</td>
+                                </tr>
+                            """
+        
+        list_total_ht = ""
+        for total_ht in client_factures:
+            list_produit += f"""<tr>
+                                    <td>{produit.produits}</td>
+                                    <td>{produit.quantites}</td>
+                                    <td>{produit.prix_unitaire}</td>
+                                    <td>{produit.montant_ht} FCFA</td>
+                                </tr>
+                            """
         facture_html = f"""
             <!DOCTYPE html>
                 <html lang="fr">
@@ -424,10 +445,10 @@ class FactureManager:
                                 <div class="client">
                                     <h3>Facturé à :</h3>
                                     <div>
-                                        <h4>{client[0].nom_client}</h4>
+                                        <h4>{client.nom}</h4>
                         
-                                        <p><span>Code client : </span>{client[0].code_client}</p>
-                                        <p><span>IFU : </span></p>
+                                        <p><span>Code client : </span>{client.code_client}</p>
+                                        <p><span>IFU : </span>{client.IFU}</p>
                                     </div>
                                 </div>
                                 <div>
@@ -453,30 +474,7 @@ class FactureManager:
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Akassa congelé</td>
-                                            <td>1</td>
-                                            <td>2000</td>
-                                            <td>2000 FCFA</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Akassa congelé</td>
-                                            <td>1</td>
-                                            <td>2000</td>
-                                            <td>2000 FCFA</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Akassa congelé</td>
-                                            <td>1</td>
-                                            <td>2000</td>
-                                            <td>2000 FCFA</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Akassa congelé</td>
-                                            <td>1</td>
-                                            <td>2000</td>
-                                            <td>2000 FCFA</td>
-                                        </tr>
+                                        {list_produit}
                                     </tbody>
                                 </table>
                             </div>
@@ -484,7 +482,7 @@ class FactureManager:
                                 <div class="montant">
                                     <div>
                                         <strong>Sous-Total HT :</strong>
-                                        <span>FCFA</span>
+                                        <span> FCFA</span>
                                     </div>
                                     <div>
                                         <strong>TVA (18%) :</strong>
