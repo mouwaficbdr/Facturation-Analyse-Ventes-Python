@@ -1,6 +1,17 @@
 import pandas as pd
 
-def generate_discount_card_for_invoice(invoice_row, discounts_path='data/CartesReduction.xlsx', invoices_path='exports/historique_factures.xlsx'):
+
+#Fonction pour générer une carte de réduction pour la dernière facture
+#Vous devrez l'appeler seulement après la génération de la facture et l'enregistrement de la facture dans l'historique des factures sinon dohi !!!
+#Dans ces conditions, elle n'aura besoin qu'on lui passe aucun paramètre
+def generate_discount_card_for_last_invoice(discounts_path='data/CartesReduction.xlsx', invoices_path='exports/historique_factures.xlsx'):
+    try:
+        df_invoices = pd.read_excel(invoices_path)
+    except Exception:
+        return
+    if df_invoices.empty:
+        return
+    invoice_row = df_invoices.iloc[-1]
     client = invoice_row['Client']
     amount = invoice_row['Amount_TTC']
 
@@ -12,12 +23,7 @@ def generate_discount_card_for_invoice(invoice_row, discounts_path='data/CartesR
     if client in set(df_discounts['code_client']):
         return
 
-    try:
-        df_invoices = pd.read_excel(invoices_path)
-    except Exception:
-        return
     df_client_invoices = df_invoices[df_invoices['Client'] == client].sort_values('Date')
-
     if len(df_client_invoices) == 1:
         return
 

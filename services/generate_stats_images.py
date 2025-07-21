@@ -15,8 +15,9 @@ df = pd.read_excel(invoices_path)
 if not pd.api.types.is_datetime64_any_dtype(df['Date']):
     df['Date'] = pd.to_datetime(df['Date'])
 
-# Créer le dossier exports s'il n'existe pas
-os.makedirs('exports', exist_ok=True)
+# Créer le dossier exports/stats s'il n'existe pas
+stats_dir = 'exports/stats'
+os.makedirs(stats_dir, exist_ok=True)
 
 # 1. Chiffre d'affaires par mois
 plt.figure(figsize=(10, 5))
@@ -29,8 +30,7 @@ ax.set_xticklabels([str(m) for m in ca_by_month.index], rotation=45, ha='right')
 for i, v in enumerate(ca_by_month.values):
     ax.text(i, v + max(ca_by_month.values)*0.01, f'{int(v):,}', ha='center', va='bottom', fontsize=10)
 plt.tight_layout()
-plt.savefig('exports/ca_par_mois.png')
-plt.show()
+plt.savefig(os.path.join(stats_dir, 'ca_par_mois.png'))
 plt.close()
 
 # 2. Top 5 produits les plus vendus
@@ -44,8 +44,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=20, ha='right')
 for i, v in enumerate(top_products.values):
     ax.text(i, v + max(top_products.values)*0.01, f'{int(v):,}', ha='center', va='bottom', fontsize=10)
 plt.tight_layout()
-plt.savefig('exports/top_5_produits.png')
-plt.show()
+plt.savefig(os.path.join(stats_dir, 'top_5_produits.png'))
 plt.close()
 
 # 3. Répartition du chiffre d'affaires par client (camembert)
@@ -58,8 +57,7 @@ colors = sns.color_palette('pastel', n_colors=len(ca_by_client))
 plt.pie(ca_by_client, labels=ca_by_client.index, autopct='%1.1f%%', startangle=90, colors=colors, wedgeprops={'edgecolor': 'white'})
 plt.title('Répartition du CA par client')
 plt.tight_layout()
-plt.savefig('exports/ca_par_client.png')
-plt.show()
+plt.savefig(os.path.join(stats_dir, 'ca_par_client.png'))
 plt.close()
 
 # 4. Nombre de commandes par client
@@ -73,6 +71,5 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=20, ha='right')
 for i, v in enumerate(orders_by_client.values):
     ax.text(i, v + max(orders_by_client.values)*0.01, f'{int(v):,}', ha='center', va='bottom', fontsize=10)
 plt.tight_layout()
-plt.savefig('exports/commandes_par_client.png')
-plt.show()
+plt.savefig(os.path.join(stats_dir, 'commandes_par_client.png'))
 plt.close()

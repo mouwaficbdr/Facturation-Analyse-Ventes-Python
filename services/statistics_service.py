@@ -32,32 +32,34 @@ class StatisticsService:
     def total_discount_cards(self):
         return len(self.df_discounts)
 
-    def best_selling_product(self):
+    def best_selling_product_name(self):
         sales = self.df_invoices.groupby('Products')['Quantity'].sum()
         if sales.empty:
-            return None, 0
-        product = sales.idxmax()
-        quantity = sales.max()
-        return product, quantity
+            return None
+        return sales.idxmax()
 
-    def best_client(self):
+    def best_selling_product_quantity(self):
+        sales = self.df_invoices.groupby('Products')['Quantity'].sum()
+        if sales.empty:
+            return 0
+        return sales.max()
+
+    def best_client_name(self):
         client_revenue = self.df_invoices.groupby('Client')['Amount_TTC'].sum()
         if client_revenue.empty:
-            return None, 0
-        client = client_revenue.idxmax()
-        amount = client_revenue.max()
-        return client, amount
+            return None
+        return client_revenue.idxmax()
 
-    def sales_distribution_by_client(self):
-        orders = self.df_invoices.groupby('Client')['Invoice_number'].nunique()
-        revenue = self.df_invoices.groupby('Client')['Amount_TTC'].sum()
-        result = []
-        for client in orders.index:
-            result.append({
-                'Client': client,
-                'Order_count': orders[client],
-                'Revenue': revenue[client]
-            })
-        return result
+    def best_client_revenue(self):
+        client_revenue = self.df_invoices.groupby('Client')['Amount_TTC'].sum()
+        if client_revenue.empty:
+            return 0
+        return client_revenue.max()
+
+    def order_count_by_client(self):
+        return self.df_invoices.groupby('Client')['Invoice_number'].nunique().to_dict()
+
+    def revenue_by_client(self):
+        return self.df_invoices.groupby('Client')['Amount_TTC'].sum().to_dict()
 
     
