@@ -29,7 +29,7 @@ class FactureManager:
             pd.DataFrame(columns=columns).to_excel(self.INVOICES_FILE, index=False)
 
 
-    def ajouter_facture(self, numero_facture, remise, client, produits):
+    def ajouter_facture(self, code_client, remise, produits = []):
         """
         Ajoute une facture à l'historique, une ligne par produit.
         :param numero_facture: Numéro unique de facture

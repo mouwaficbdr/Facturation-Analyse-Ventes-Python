@@ -32,3 +32,7 @@ class Model():
             return code_root + '0' + f"{index}"
         else :
             return code_root + f"{index}"
+
+    def _findEntry(self, file, key, value):
+            data = p.DataFrame(self._getAllData(file))
+            return data[data[key] == value]

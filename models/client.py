@@ -2,10 +2,12 @@ import pandas as pd
 from models.model import Model
 
 class Client(Model):
+    __managed_file = "Clients.xlsx"
+    __code_client_root = "C"
     
     def __init__(self, name, contact, ifu, file = "Clients.xlsx"):
         if type(contact) != int:
-            raise ClientDataError(f"Le contat {contact} n'est pas correcte.")
+            raise ClientDataError(f"Le contact {contact} n'est pas correcte.")
         
         if len(str(contact)) != 9:
             raise ClientDataError(f"Le numéro {contact} doit être un numéro à 9 chiffres.")
@@ -20,7 +22,8 @@ class Client(Model):
         if not clients_ifu[clients_ifu['IFU'] == ifu].empty:
             raise ClientIFUError(f"Le numéro IFU {ifu} existe déjà (Vous êtes suspect !!).")
 
-        self._createData(file, 'C', [name, contact, ifu])
+
+        self._createData(file, self.__code_client_root, [name, contact, ifu])
 
 
     # Retourne tous les clients sous forme de liste de dictionnaire
@@ -28,6 +31,8 @@ class Client(Model):
     def getallClients ():
         return Model._getAllData(Client, "Clients.xlsx")
     
+    def find(self, key, value):
+       return self.findEntry(self.__managed_file, key, value)
 
 
 # Client Exception Definition
@@ -35,4 +40,7 @@ class ClientDataError(Exception):
     pass
 
 class ClientIFUError(ClientDataError):
+    pass
+
+class ClientCodeError(ClientDataError):
     pass
