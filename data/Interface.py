@@ -169,9 +169,9 @@ class FacturationApp:
         frame2=tk.Frame(parent, background='#F5F5F5')
         frame2.pack(fill='x')
         tk.Label(frame2, text='Consultez vos clients, produits et cartes de réductions.', font=('Roboto', 10),
-        foreground='gray',bg='white').pack(side='left')
+        foreground='gray',bg='#F5F5F5').pack(side='left')
 
-        frame3 = tk.Frame(parent, pady=20)
+        frame3 = tk.Frame(parent, pady=20,bg='#F5F5F5')
         frame3.pack(fill="x")  # Le conteneur prend toute la largeur
 
         frame4 = tk.Frame(parent, pady=40)
@@ -192,7 +192,11 @@ class FacturationApp:
             },
             {
                 'content':'Produits',
-                'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
+                'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_Produit', 'Libellé', 'Prix unitaire'], [{
+                    'Code_Produit' :'P001',
+                    'Libellé' : 'Ordinateur portable',
+                    'Prix unitaire' :'€800'
+                }])
             },
             {
                 'content':'Cartes de réductions',
@@ -219,6 +223,7 @@ class FacturationApp:
             frame.destroy();
         
         starterFrame.pack(fill='x')
+        starterFrame.configure(padx=5,pady=5)
 
         if not isinstance(header, list):      
             return 'Un tableau avec les clés du fichier est attendu.'
@@ -230,13 +235,13 @@ class FacturationApp:
         headerZone=tk.Frame(starterFrame, pady=10)
         headerZone.pack(fill='x', anchor='w')
 
-        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
+        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', anchor='w', justify='left').pack(fill='x')
         headerZone=tk.Frame(starterFrame, pady=10)
         headerZone.pack(fill='x', anchor='w')
 
-        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
+        # tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
 
-        frame=tk.Frame(starterFrame, pady=10)
+        frame=tk.Frame(starterFrame)
         frame.pack(fill='x', anchor='w')
         frame.pack(fill='x', anchor='w')
 
@@ -246,7 +251,7 @@ class FacturationApp:
             tk.Label(frame, text=header[i], foreground='gray', pady=10, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
 
         for i in range(len(content)):
-            for j in range(4):
+            for j in range(len(header)):
                 tk.Label(frame, text=content[i][header[j]], foreground='black', pady=5, font=('Roboto', 15)).grid(row=i+1, column=j, sticky='nsew')
 
     def factureMotion(self, parent):
