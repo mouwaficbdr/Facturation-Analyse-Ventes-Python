@@ -4,14 +4,14 @@ from tkinter.font import BOLD
 from produits_model import Products
 from tkinter import messagebox
 from clients_model import Client
-from services.statistics_service import StatisticsService
+# from services.statistics_service import StatisticsService
 
-statis = StatisticsService(
-    'exports/historique_factures .xlsx',
-    'data/Clients.xlsx',
-    'data/Produits.xlsx',
-    'data/CartesReduction.xlsx'
-)
+# statis = StatisticsService(
+#     'exports/historique_factures .xlsx',
+#     'data/Clients.xlsx',
+#     'data/Produits.xlsx',
+#     'data/CartesReduction.xlsx'
+# )
 
 
 class FacturationApp:
@@ -35,7 +35,7 @@ class FacturationApp:
         header.pack(fill="x")
         label = tk.Label(header, text="Application de facturation", font=("Roboto", 18, "bold"), bg="white", foreground='black')
         label.pack(side='left')
-        quit_btn = tk.Button(header, text="Quitter l'application", fg="white", bg="#BF3F3F",
+        quit_btn = tk.Button(header, text="Quitter", fg="white", bg="#BF3F3F",
                              font=("Roboto", 11, "bold"), relief="solid", borderwidth=1, command=self.root.quit)
         quit_btn.pack(side="right", padx=15, pady=15)
 
@@ -134,10 +134,10 @@ class FacturationApp:
         underframe.rowconfigure(1,weight=1)
 
         stats = {
-            'Total clients' : statis.total_clients(),
-            'Produits' : statis.total_products(),
-            'Cartes de réduction' : statis.total_discount_cards(),
-            'CA Total' : statis.total_revenue() + ' FCFA' 
+            'Total clients' :20,
+            'Produits' : 11,
+            'Cartes de réduction' : 5 ,
+            'CA Total' : 10 
         }
 
         for col_index, (label, value) in enumerate(stats.items()):
@@ -887,4 +887,4 @@ class FacturationApp:
         canvas.unbind_all("<MouseWheel>")
 
 FacturationApp()
-# print(Client().getallClients())
+# print(statis.total_revenue())

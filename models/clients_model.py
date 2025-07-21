@@ -3,7 +3,7 @@ from pickle import NONE
 import pandas as p
 from openpyxl import load_workbook
 from model import Model
-from services.statistics_service import StatisticsService
+# from services.statistics_service import StatisticsService
 class Client(Model):
     __managed_file="Clients.xlsx"
     __code_client_root="C"

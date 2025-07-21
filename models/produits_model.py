@@ -12,6 +12,3 @@ class Products (Model):
     def getAllProducts(self):
         return self._getAllData(self.__managed_file)
 
-
-# Test rapide de création d'entrée et affichage de toutes entrées au format JSON, venez me taper!
-# print((Products()).getAllProducts())
