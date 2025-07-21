@@ -116,14 +116,15 @@ class FactureManager:
             return []
 
 
-    def generatePDF(self):
+    def generatePDF(self, code_client):
+        client = self.get_factures_client(code_client)
         facture_html = f"""
             <!DOCTYPE html>
-                <html lang="en">
+                <html lang="fr">
                     <head>
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Document</title>
+                        <title>Facture</title>
                     </head>
                     <body>
                         <style>
@@ -362,7 +363,7 @@ class FactureManager:
                                 </div>
                                 <div class="facture">
                                     <h4>FACTURE</h4>
-                                    <p><span>Date : </span>20/12/2025</p>
+                                    <p><span>Date : </span>{client[0].date}</p>
                                     <p><span>Echéance : </span>No way</p>
                                 </div>
                             </header>
@@ -371,10 +372,10 @@ class FactureManager:
                                 <div class="client">
                                     <h3>Facturé à :</h3>
                                     <div>
-                                        <h4></h4>
+                                        <h4>{client[0].nom_client}</h4>
                         
-                                        <p><span>Code client : </span></p>
-                                        <p><span>IFU : </span></p>    
+                                        <p><span>Code client : </span>{client[0].code_client}</p>
+                                        <p><span>IFU : </span></p>
                                     </div>
                                 </div>
                                 <div>
