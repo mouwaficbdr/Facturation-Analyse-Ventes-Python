@@ -4,14 +4,14 @@ from tkinter.font import BOLD
 from produits_model import Products
 from tkinter import messagebox
 from clients_model import Client
-from services.statistics_service import StatisticsService
+# from services.statistics_service import StatisticsService
 
-statis = StatisticsService(
-    'exports/historique_factures .xlsx',
-    'data/Clients.xlsx',
-    'data/Produits.xlsx',
-    'data/CartesReduction.xlsx'
-)
+# statis = StatisticsService(
+#     'exports/historique_factures .xlsx',
+#     'data/Clients.xlsx',
+#     'data/Produits.xlsx',
+#     'data/CartesReduction.xlsx'
+# )
 
 
 class FacturationApp:
@@ -35,7 +35,7 @@ class FacturationApp:
         header.pack(fill="x")
         label = tk.Label(header, text="Application de facturation", font=("Roboto", 18, "bold"), bg="white", foreground='black')
         label.pack(side='left')
-        quit_btn = tk.Button(header, text="Quitter l'application", fg="white", bg="#BF3F3F",
+        quit_btn = tk.Button(header, text="Quitter", fg="white", bg="#BF3F3F",
                              font=("Roboto", 11, "bold"), relief="solid", borderwidth=1, command=self.root.quit)
         quit_btn.pack(side="right", padx=15, pady=15)
 
@@ -886,5 +886,5 @@ class FacturationApp:
     def _unbind_from_mousewheel(self, canvas):
         canvas.unbind_all("<MouseWheel>")
 
-# FacturationApp()
-print(statis.total_revenue())
+FacturationApp()
+# print(statis.total_revenue())
