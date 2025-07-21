@@ -1,4 +1,5 @@
-from models.facture import PDF
+from models.facture import FactureManager
 
-pdf1 = PDF()
-pdf1.generatePDF()
+fac1 = FactureManager()
+
+print(fac1.get_facture_detaillee("C001"))
