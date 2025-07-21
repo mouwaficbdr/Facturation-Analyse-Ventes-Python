@@ -4,7 +4,7 @@ from tkinter.font import BOLD
 # from produits_model import Products
 from tkinter import messagebox
 from clients_model import Client
-from statistics_service import StatisticsService
+from models.statistics_models import StatisticsService
 
 
 statis = StatisticsService(
