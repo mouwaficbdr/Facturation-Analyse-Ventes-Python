@@ -1,6 +1,8 @@
 from multiprocessing.connection import Client
 import tkinter as tk
 from tkinter.font import BOLD
+from produits_model import Products 
+# from 
 
 class FacturationApp:
 
@@ -36,7 +38,7 @@ class FacturationApp:
 
         self.create_sidebar()
         self.create_board_container()
-        self.show_section(self.historyMotion)  
+        self.show_section(self.boardMotion)  
 
     def create_sidebar(self):
         sidebar = tk.Frame(self.bodyFrame, width=230, background="#F5F5F5")
@@ -151,7 +153,7 @@ class FacturationApp:
                  background='#F5F5F5', foreground='gray').pack(side='left')
 
         # Conteneur principal blanc
-        frame3 = tk.Frame(parent, bg="blue", padx=20, pady=20)
+        frame3 = tk.Frame(parent, bg="white", padx=20, pady=20)
         frame3.pack(fill='both', pady=20)
 
         # En-têtes de colonnes
@@ -195,7 +197,7 @@ class FacturationApp:
         ]
 
         #line
-        table = tk.Frame(frame3, bg='blue')
+        table = tk.Frame(frame3, bg='white')
         table.pack(fill='both', expand=True)
 
         # Affichage des en-têtes
@@ -769,27 +771,20 @@ class FacturationApp:
         soustitre = tk.Label(form_frame, text="Remplissez les informations du produit", font=("Roboto", 10),
                                 bg="white", fg="gray", pady=10)
         soustitre.pack(anchor="w")
-
-            # Code produit 
-        code_label = tk.Label(form_frame, text="Code produit", font=("Roboto", 9, "bold"), bg="white", anchor="w")
-        code_label.pack(anchor="w", pady=(5, 0))
-
-        code_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
-        code_input.pack(fill='x', pady=(0, 10))
-
+         
             # Libellé 
-        libelle_label = tk.Label(form_frame, text="Libellé", font=("Roboto", 9, "bold"), bg="white", anchor="w")
-        libelle_label.pack(anchor="w", pady=(5, 0))
+        self.libelle_label = tk.Label(form_frame, text="Libellé", font=("Roboto", 9, "bold"), bg="white", anchor="w")
+        self.libelle_label.pack(anchor="w", pady=(5, 0))
 
-        libelle_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
-        libelle_input.pack(fill='x', pady=(0, 10))
+        self.libelle_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
+        self.libelle_input.pack(fill='x', pady=(0, 10))
 
             # Prix unitaire
-        prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Roboto", 9, "bold"), bg="white", anchor="w")
-        prix_label.pack(anchor="w", pady=(5, 0))
+        self.prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Roboto", 9, "bold"), bg="white", anchor="w")
+        self.prix_label.pack(anchor="w", pady=(5, 0))
 
-        prix_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
-        prix_input.pack(fill='x', pady=(0, 15))
+        self.prix_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
+        self.prix_input.pack(fill='x', pady=(0, 15))
 
             # Bouton Ajouter
         ajouter_btn = tk.Button(form_frame, text=" +  Ajouter le produit", bg="black", fg="white",
@@ -797,6 +792,9 @@ class FacturationApp:
         ajouter_btn.pack(fill='x')
 
     def createProduct(self):
+        print(self.libelle_input.get('1.0',tk.END))
+        # print(self.code_input.get('1.0',tk.END))
+        print(self.prix_input.get('1.0',tk.END))
         
 
     def StatisquesMotion(self, parent):
