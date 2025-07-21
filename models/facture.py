@@ -84,7 +84,43 @@ class FactureManager:
         except Exception as e:
             print(f"\nErreur lors de la recherche : {str(e)}")
             return []
+    def get_factures_client(self, code_client):
+        """
+        Retourne l'historique des factures pour un client spécifique sous forme d'une liste de dictionnaires.
+        Si aucune facture n'est trouvée ou en cas d'erreur, retourne une liste vide.
+        """
+        try:
+            df = pd.read_excel(self.INVOICES_FILE)
+            df_client = df[df['code_client'] == code_client]
+            if df_client.empty:
+                return []
+            df_client = df_client.sort_values('date', ascending=False)
+            return df_client.to_dict(orient='records')
+        except Exception as e:
+            print(f"\nErreur lors de la recherche : {str(e)}")
+            return []
 
+
+    def get_client_info(self, code_client):
+            """
+            Récupère les informations d'un client spécifique depuis le fichier Clients.xlsx.
+            Retourne un dictionnaire avec les infos du client, ou None si non trouvé.
+            """
+            try:
+                clients_file = os.path.join("data", "Clients.xlsx")
+                if not os.path.exists(clients_file):
+                    print(f"Erreur : Le fichier {clients_file} est introuvable.")
+                    return None
+                df_clients = pd.read_excel(clients_file)
+                client_data = df_clients[df_clients['code'] == code_client]
+                if client_data.empty:
+                    print(f"Aucun client trouvé avec le code : {code_client}")
+                    return None
+                return client_data.to_dict('records')[0]
+            except Exception as e:
+                print(f"Une erreur est survenue lors de la récupération des infos client : {str(e)}")
+                return None
+        
     def get_historique_complet(self):
         """
         Retourne l'historique complet des factures sous forme d'une liste de dictionnaires.
