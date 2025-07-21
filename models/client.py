@@ -16,39 +16,18 @@ class Client(Model):
         if len(str(ifu)) != 13:
             raise ClientIFUError(f"Le numéro IFU {ifu} doit être à 13 chiffres")
         
-        clients_ifu = self._get_datas()['IFU']
-        print(clients_ifu)
-        if not clients_ifu[clients_ifu == ifu].empty:
+        clients_ifu = pd.DataFrame(self._getAllData(file))
+        if not clients_ifu[clients_ifu['IFU'] == ifu].empty:
             raise ClientIFUError(f"Le numéro IFU {ifu} existe déjà (Vous êtes suspect !!).")
-        
-        new_client = pd.DataFrame({
-            'code_client': [self.__create_code_client()],
-            'nom': [name],
-            'contact': [contact],
-            'IFU': [ifu]
-        })
 
-        self._add_data(new_client, file)
+        self._createData(file, 'C', [name, contact, ifu])
 
 
-
-    def __create_code_client(self):
-        clients = self._get_datas()
-        
-        last_code = clients['code_client'].iloc[-1]
-
-        last_number = int(last_code.strip('C'))
-        new_client_code = ""
-
-        if(last_number + 1 < 10):
-            new_client_code = f"C00{last_number + 1}"
-        elif(last_number >= 10 and last_number < 100):
-            new_client_code = f"C0{last_number + 1}"
-        else:
-            new_client_code = f"C{last_number + 1}"
-
-        return new_client_code
-
+    # Retourne tous les clients sous forme de liste de dictionnaire
+    @staticmethod
+    def getallClients ():
+        return Model._getAllData(Client, "Clients.xlsx")
+    
 
 
 # Client Exception Definition

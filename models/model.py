@@ -14,6 +14,7 @@ class Model():
         # Insertion des données dans le fichier apres génération du code unique
         if new_file_!= None :
             index=new_file_.max_row
+            code = self.__generateCode(code_root,index)
             data.insert(0,self.__generateCode(code_root,index))
             new_file_.append(data)
             file_.save(file_path)
