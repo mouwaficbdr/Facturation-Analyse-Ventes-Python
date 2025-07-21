@@ -134,10 +134,10 @@ class FacturationApp:
         underframe.rowconfigure(1,weight=1)
 
         stats = {
-            'Total clients' : statis.total_clients(),
-            'Produits' : statis.total_products(),
-            'Cartes de réduction' : statis.total_discount_cards(),
-            'CA Total' : statis.total_revenue() + ' FCFA' 
+            'Total clients' :20,
+            'Produits' : 11,
+            'Cartes de réduction' : 5 ,
+            'CA Total' : 10 
         }
 
         for col_index, (label, value) in enumerate(stats.items()):
@@ -886,5 +886,5 @@ class FacturationApp:
     def _unbind_from_mousewheel(self, canvas):
         canvas.unbind_all("<MouseWheel>")
 
-FacturationApp()
-# print(Client().getallClients())
+# FacturationApp()
+print(statis.total_revenue())
