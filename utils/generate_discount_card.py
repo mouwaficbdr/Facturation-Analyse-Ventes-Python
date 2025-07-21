@@ -1,13 +1,12 @@
 import pandas as pd
 from models.client import Client
 
-AMOUNT1=50000
-AMOUNT2=100000
-AMOUNT3=200000
-
-DISCOUNT1=5
-DISCOUNT2=10
-DISCOUNT3=15
+# Variables globales pour les seuils et taux de réduction
+DISCOUNT_THRESHOLDS = [
+    {"amount": 50000, "discount": 0},
+    {"amount": 100000, "discount": 10},
+    {"amount": 200000, "discount": 15},
+]
 
 
 #Fonction pour générer une carte de réduction pour la dernière facture
@@ -36,14 +35,16 @@ def generate_discount_card_for_last_invoice(discounts_path='data/CartesReduction
     if len(df_client_invoices) == 1:
         return
 
-    if amount <  AMOUNT1:
+    # Détermination du taux de réduction selon le montant
+    discount = None
+    for threshold in DISCOUNT_THRESHOLDS:
+        if amount < threshold["amount"]:
+            discount = threshold["discount"]
+            break
+    if discount is None:
+        discount = DISCOUNT_THRESHOLDS[-1]["discount"]
+    if amount < DISCOUNT_THRESHOLDS[0]["amount"]:
         return
-    elif amount < AMOUNT2:
-        discount = DISCOUNT1
-    elif amount < AMOUNT3:
-        discount = DISCOUNT2
-    else:
-        discount = DISCOUNT3
 
     card_number = f"{client}-001"
     new_card = {
