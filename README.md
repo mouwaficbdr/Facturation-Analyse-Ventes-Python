@@ -13,30 +13,24 @@ L'application propose les fonctionnalités suivantes :
    * Affichage des clients.
    * Affichage des produits.
    * Affichage des cartes de réduction.
-
 2. **Génération de Factures :**
 
    * Gestion des nouveaux clients et des clients existants lors de la facturation.
    * Saisie des produits à facturer (code produit et quantité).
    * Récupération des données nécessaires depuis les fichiers Excel pour générer la facture.
    * Génération de factures au format PDF.
-
 3. **Gestion des Produits :**
 
    * Permet d'ajouter un nouveau produit au fichier `Produits.xlsx`.
-
 4. **Gestion des Cartes de Réduction :**
 
    * Création d'une carte de réduction pour le client lorsque le montant d'une facture se trouve dans une fourchette définie.
    * Aucune remise n'est appliquée sur la première facture d'un client.
    * Un client ne peut posséder qu'une seule carte de réduction.
-
 5. **Statistiques sur les ventes :**
    Ajout de fonctionnalités pour analyser les données de ventes (ex: produit le plus vendu, total par client).
-
 6. **Historique des factures :**
    Implémentation d'un système de suivi et d'archivage des factures générées.
-
 7. **Interface graphique (GUI) :**
    Développement d'une interface utilisateur graphique (Tkinter).
 
@@ -67,14 +61,12 @@ Les fichiers initiaux contiennent 10 produits et 2 clients.
    git clone https://github.com/votre_utilisateur/tp-python.git
    cd tp-python
    ```
-
 2. **Installer les dépendances :**
    Assurez-vous que Python 3 est installé. Ensuite, installez les bibliothèques requises :
 
    ```bash
    pip install pandas openpyxl reportlab # ou fpdf, ou pdfkit
    ```
-
 3. **Lancer l'application :**
 
    ```bash
@@ -94,7 +86,3 @@ Les fichiers initiaux contiennent 10 produits et 2 clients.
 ## 💡 Contribution
 
 Ce projet est ouvert aux contributions. Pour toute idée d'amélioration, rapport de bug ou optimisation, veuillez ouvrir une *issue* ou soumettre une *pull request*.
-
----
-
-Tu veux une version en anglais aussi, ou c’est bon comme ça ?
