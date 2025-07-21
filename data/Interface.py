@@ -7,7 +7,7 @@ class FacturationApp:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Application de Facturation")
-        self.root.geometry("1100x700")
+        self.root.geometry(f"{self.root.winfo_screenwidth()}x{self.root.winfo_screenheight()}+0+0")
         self.root.resizable(False, False)
 
         self.bodyFrame = tk.Frame(self.root, bg="#F5F5F5", padx=15, pady=15)
@@ -142,7 +142,7 @@ class FacturationApp:
 
     def historyMotion(self,parent):
         frame1 = tk.Frame(parent, background="#F5F5F5")
-        frame1.pack(fill='x')
+        frame1.pack(fill='both')
         tk.Label(frame1, text='Historiques des ventes', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
         frame2 = tk.Frame(parent, background="#F5F5F5")
@@ -150,9 +150,9 @@ class FacturationApp:
         tk.Label(frame2, text="Observez ici l'historique des ventes effectuées", font=('Roboto', 12, 'bold'),
                  background='#F5F5F5', foreground='gray').pack(side='left')
 
-        # Conteneur principal blanc, occupe tout l'espace disponible
-        frame3 = tk.Frame(parent, bg="white", padx=0, pady=0)
-        frame3.pack(fill='both', expand=True, padx=10, pady=10)
+        # Conteneur principal blanc
+        frame3 = tk.Frame(parent, bg="blue", padx=20, pady=20)
+        frame3.pack(fill='both', pady=20)
 
         # En-têtes de colonnes
         historyMenu = [
@@ -194,14 +194,14 @@ class FacturationApp:
             }
         ]
 
-        # Table
-        table = tk.Frame(frame3, bg='white')
+        #line
+        table = tk.Frame(frame3, bg='blue')
         table.pack(fill='both', expand=True)
 
         # Affichage des en-têtes
         for col, header in enumerate(headers):
             tk.Label(table, text=header, font=('Roboto', 10, 'bold'),
-                     bg='white', fg='gray', padx=8, pady=6, anchor='w').grid(row=0, column=col, sticky='nsew')
+                     bg='white', fg='gray', padx=8, pady=6, anchor='w').grid(row=0, column=col, sticky='ew')
 
         # Ligne de séparation
         tk.Frame(table, height=1, bg='#ddd').grid(row=1, column=0, columnspan=len(headers), sticky='ew', pady=(2, 5))
@@ -210,8 +210,8 @@ class FacturationApp:
         for row_index, row in enumerate(historyStats, start=2):
             for col_index, key in enumerate(historyMenu):
                 value = row.get(key, "")
-                tk.Label(table, text=value, font=('Roboto', 10),
-                         bg='white', fg='black', padx=8, pady=4, anchor='w').grid(row=row_index, column=col_index, sticky='nsew')
+                tk.Label(table, text=value, width=150, font=('Roboto', 10),
+                         bg='white', fg='black', padx=8, pady=4, anchor='w').grid(row=row_index, column=col_index, sticky='ew')
 
         # Ajustement des colonnes pour un affichage responsive
         for col in range(len(headers)):
@@ -793,8 +793,11 @@ class FacturationApp:
 
             # Bouton Ajouter
         ajouter_btn = tk.Button(form_frame, text=" +  Ajouter le produit", bg="black", fg="white",
-                                    font=("Roboto", 10, "bold"), padx=10, pady=10, relief="flat", cursor="hand2")
+                                    font=("Roboto", 10, "bold"), padx=10, pady=10, relief="flat",command= self.createProduct ,cursor="hand2")
         ajouter_btn.pack(fill='x')
+
+    def createProduct(self):
+        
 
     def StatisquesMotion(self, parent):
         frame1 = tk.Frame(parent,background="#F5F5F5")
