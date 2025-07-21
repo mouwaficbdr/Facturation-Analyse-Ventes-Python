@@ -2,6 +2,7 @@ from weasyprint import HTML
 import pandas as pd
 from datetime import datetime
 import os
+from services.discount_service import verify_discount, generate_discount_card_for_last_invoice
 
 class FactureManager:
     def __init__(self, data_folder="export"):
@@ -27,6 +28,11 @@ class FactureManager:
                 "total_ttc"
             ]
             pd.DataFrame(columns=columns).to_excel(self.INVOICES_FILE, index=False)
+
+    def is_elligible(ifu):
+        if(verify_discount(ifu)):
+            generate_discount_card_for_last_invoice()
+
 
 
     def ajouter_facture(self, code_client, remise, produits = []):

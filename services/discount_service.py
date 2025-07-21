@@ -1,5 +1,5 @@
 import pandas as pd
-
+from models.client import Client
 
 #Fonction pour générer une carte de réduction pour la dernière facture
 #Vous devrez l'appeler seulement après la génération de la facture et l'enregistrement de la facture dans l'historique des factures sinon dohi !!!
@@ -13,7 +13,7 @@ def generate_discount_card_for_last_invoice(discounts_path='data/CartesReduction
         return
     invoice_row = df_invoices.iloc[-1]
     client = invoice_row['Client']
-    amount = invoice_row['Amount_TTC']
+    amount = invoice_row['Amount_HT']
 
     try:
         df_discounts = pd.read_excel(discounts_path)
@@ -44,3 +44,9 @@ def generate_discount_card_for_last_invoice(discounts_path='data/CartesReduction
     }
     df_discounts = pd.concat([df_discounts, pd.DataFrame([new_card])], ignore_index=True)
     df_discounts.to_excel(discounts_path, index=False) 
+
+
+# Renvoie True si le client n'existe pas
+def verify_discount(ifu):
+    clients = pd.DataFrame(Client.getallClients())
+    return clients[clients['IFU'] == ifu].empty
