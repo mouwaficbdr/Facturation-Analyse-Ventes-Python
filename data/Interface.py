@@ -2,7 +2,7 @@ from multiprocessing.connection import Client
 import tkinter as tk
 from tkinter.font import BOLD
 
-class myInterface:
+class FacturationApp:
 
     def __init__(self):
         self.root = tk.Tk()
@@ -181,17 +181,17 @@ class myInterface:
                 'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
             },
             {
-                'content':'Produits',
+                'content':'Cartes de réductions',
                 'function': lambda: self.renderFileContent(frame4, 'Liste des cartes de réductions', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
             }
         ]
 
         for i in range(3):
-            btn = tk.Button(frame3, text='Client', bg=color_set['buttonsbg'], fg='black', font=('Roboto', 12), relief='raised', pady=10, padx=5, cursor='hand2', command=btnManager[i]['function'] )
+            btn = tk.Button(frame3, text=btnManager[i]['content'], bg=color_set['buttonsbg'], fg='black', font=('Roboto', 12), relief='raised', pady=10, padx=5, cursor='hand2', command=btnManager[i]['function'] )
             btn.grid(row=0, column=i, sticky="nsew")
 
         
-        frame4.pack(anchor='center')
+        frame4.pack( fill='x')
 
         tk.Label(frame4, text="Cliquez sur un button pour voir le contenu du fichier correspondant.", font=('Roboto', 15, 'bold'),
         foreground='black').pack(fill='x')
@@ -213,64 +213,277 @@ class myInterface:
             tk.Label(starterFrame, text='Aucun contenu.', foreground='gray', pady=5, font=('Roboto', 20, 'bold')).pack(anchor='center')
             return;
 
-        tk.Label(starterFrame, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10).pack(side='left')
+        headerZone=tk.Frame(starterFrame, pady=10)
+        headerZone.pack(fill='x', anchor='w')
+
+        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
 
         frame=tk.Frame(starterFrame, pady=10)
-        frame.pack(flll='x')
+        frame.pack(fill='x', anchor='w')
 
         for i in range(len(header)):
             frame.grid_columnconfigure(i, weight=1)
-            tk.Label(frame, text=header[i], foreground='gray', pady=5, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
+            tk.Label(frame, text=header[i], foreground='gray', pady=10, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
 
         for i in range(len(content)):
             for j in range(4):
                 tk.Label(frame, text=content[i][header[j]], foreground='black', pady=5, font=('Roboto', 15)).grid(row=i+1, column=j, sticky='nsew')
 
 
-
         
     def factureMotion(self, parent):
-        tk.Label(parent, text='This is the facture section', font=('Roboto', 20, 'bold'),
-                 background='#F5F5F5', foreground='black', padx=10, width=300).pack(fill='x')
+        # Variables pour gérer l'état des radio buttons et des champs
+        if not hasattr(self, 'client_type_var'):
+            self.client_type_var = tk.StringVar(value="nouveau")
+        
+        # Header
+        frame1 = tk.Frame(parent, background="#F5F5F5")
+        frame1.pack(fill='x')
+        tk.Label(frame1, text='Générer une facture', font=('Roboto', 20, 'bold'),
+                background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
+        
+        frame2 = tk.Frame(parent, background="#F5F5F5")
+        frame2.pack(fill='x')
+        tk.Label(frame2, text='Créez une nouvelle facture pour vos clients', font=('Roboto', 12, 'bold'),
+                background='#F5F5F5', foreground='gray').pack(side='left')
+        
+        # Container principal
+        main_container = tk.Frame(parent, background="#F5F5F5")
+        main_container.pack(fill='both', expand=True, padx=20, pady=20)
+        
+        # Configuration des colonnes
+        main_container.columnconfigure(0, weight=1)
+        main_container.columnconfigure(1, weight=0)
+        
+        # Colonne gauche - Formulaire
+        left_column = tk.Frame(main_container, background="#F5F5F5")
+        left_column.grid(row=0, column=0, sticky="nsew", padx=(0, 20))
+        
+        # Colonne droite - Résumé
+        right_column = tk.Frame(main_container, background="white", padx=20, pady=20, 
+                            highlightbackground="#CCC", highlightthickness=1)
+        right_column.grid(row=0, column=1, sticky="ns", padx=(20, 0))
+        
+        # SECTION TYPE DE CLIENT 
+        type_client_frame = tk.Frame(left_column, bg="white", padx=20, pady=20, 
+                                    highlightbackground="#CCC", highlightthickness=1)
+        type_client_frame.pack(fill="x", pady=(0, 20))
+        
+        tk.Label(type_client_frame, text="Type de client", font=("Roboto", 16, "bold"), 
+                bg="white", anchor="w").pack(anchor="w", pady=(0, 15))
+        
+        # Radio buttons
+        radio_frame = tk.Frame(type_client_frame, bg="white")
+        radio_frame.pack(anchor="w")
+        
+        client_existant_radio = tk.Radiobutton(radio_frame, text="Client existant", 
+                                            variable=self.client_type_var, value="existant",
+                                            bg="white", font=("Roboto", 11),
+                                            command=lambda: self.update_client_form(parent))
+        client_existant_radio.pack(anchor="w", pady=2)
+        
+        nouveau_client_radio = tk.Radiobutton(radio_frame, text="Nouveau client", 
+                                            variable=self.client_type_var, value="nouveau",
+                                            bg="white", font=("Roboto", 11),
+                                            command=lambda: self.update_client_form(parent))
+        nouveau_client_radio.pack(anchor="w", pady=2)
+        
+        # === SECTION INFORMATIONS CLIENT ===
+        self.client_info_frame = tk.Frame(left_column, bg="white", padx=20, pady=20, 
+                                        highlightbackground="#CCC", highlightthickness=1)
+        self.client_info_frame.pack(fill="x", pady=(0, 20))
+        
+        # Cette section sera mise à jour selon le type de client sélectionné
+        self.create_client_form()
+        
+        # === SECTION PRODUITS ===
+        produits_frame = tk.Frame(left_column, bg="white", padx=20, pady=20, 
+                                highlightbackground="#CCC", highlightthickness=1)
+        produits_frame.pack(fill="both", expand=True)
+        
+        tk.Label(produits_frame, text="Produits sélectionnés", font=("Roboto", 16, "bold"), 
+                bg="white", anchor="w").pack(anchor="w", pady=(0, 5))
+        
+        tk.Label(produits_frame, text="Ajoutez des produits à votre facture", font=("Roboto", 10), 
+                bg="white", fg="gray").pack(anchor="w", pady=(0, 15))
+        
+        # Table des produits
+        table_frame = tk.Frame(produits_frame, bg="white")
+        table_frame.pack(fill="both", expand=True)
+        
+        # Headers
+        headers = ["Code\nProduit", "Libellé", "Quantité", "Prix", "Total", ""]
+        for col, header in enumerate(headers):
+            tk.Label(table_frame, text=header, font=('Roboto', 9, 'bold'),
+                    bg='white', fg='gray', padx=10, anchor='w').grid(row=0, column=col, sticky='ew', pady=5)
+        
+        # Ligne de séparation
+        tk.Frame(table_frame, height=1, bg='#ddd').grid(row=1, column=0, columnspan=6, sticky='ew', pady=2)
+        
+        # Exemple de produit
+        tk.Label(table_frame, text="P001", font=('Roboto', 10), bg='white', 
+                padx=10, anchor='w').grid(row=2, column=0, sticky='ew', pady=8)
+        tk.Label(table_frame, text="Ordinateur\nportable", font=('Roboto', 10), bg='white', 
+                padx=10, anchor='w').grid(row=2, column=1, sticky='ew', pady=8)
+        tk.Label(table_frame, text="1", font=('Roboto', 10), bg='white', 
+                padx=10, anchor='center').grid(row=2, column=2, sticky='ew', pady=8)
+        tk.Label(table_frame, text="€800", font=('Roboto', 10), bg='white', 
+                padx=10, anchor='w').grid(row=2, column=3, sticky='ew', pady=8)
+        tk.Label(table_frame, text="€800", font=('Roboto', 10, 'bold'), bg='white', 
+                padx=10, anchor='w').grid(row=2, column=4, sticky='ew', pady=8)
+        
+        # Bouton supprimer
+        delete_btn = tk.Button(table_frame, text="🗑", bg='white', fg='red', 
+                            font=('Roboto', 12), relief='flat', cursor='hand2')
+        delete_btn.grid(row=2, column=5, sticky='e', padx=10, pady=8)
+        
+        # Bouton ajouter ligne produit
+        add_product_btn = tk.Button(produits_frame, text="+ Ajouter ligne produit", 
+                                bg='#f8f9fa', fg='black', font=('Roboto', 10), 
+                                relief='solid', borderwidth=1, cursor='hand2', pady=10)
+        add_product_btn.pack(fill='x', pady=(15, 0))
+        
+        # === RÉSUMÉ DE LA FACTURE (Colonne droite) ===
+        tk.Label(right_column, text="Résumé de la facture", font=("Roboto", 16, "bold"), 
+                bg="white", anchor="w").pack(anchor="w", pady=(0, 20))
+        
+        # Détails financiers
+        details = [
+            ("Total HT:", "€800.00"),
+            ("Remise appliquée:", "-€40.00", "green"),
+            ("TVA (18%):", "€136.80"),
+            ("Total TTC:", "€896.80", "bold")
+        ]
+        
+        for item in details:
+            detail_frame = tk.Frame(right_column, bg="white")
+            detail_frame.pack(fill="x", pady=5)
+            
+            label = item[0]
+            value = item[1]
+            style = item[2] if len(item) > 2 else "normal"
+            
+            tk.Label(detail_frame, text=label, font=("Roboto", 11), bg="white", 
+                    anchor="w").pack(side="left")
+            
+            if style == "green":
+                tk.Label(detail_frame, text=value, font=("Roboto", 11), bg="white", 
+                        fg="green", anchor="e").pack(side="right")
+            elif style == "bold":
+                tk.Label(detail_frame, text=value, font=("Roboto", 14, "bold"), bg="white", 
+                        anchor="e").pack(side="right")
+            else:
+                tk.Label(detail_frame, text=value, font=("Roboto", 11), bg="white", 
+                        anchor="e").pack(side="right")
+        
+        # Bouton générer PDF
+        generate_btn = tk.Button(right_column, text="📄 Générer PDF", bg="black", fg="white",
+                                font=("Roboto", 11, "bold"), padx=20, pady=15, 
+                                relief="flat", cursor="hand2")
+        generate_btn.pack(fill='x', pady=(30, 0))
+
+    def create_client_form(self):
+        """Crée le formulaire client selon le type sélectionné"""
+        # Nettoie le frame
+        for widget in self.client_info_frame.winfo_children():
+            widget.destroy()
+        
+        if self.client_type_var.get() == "nouveau":
+            # Formulaire nouveau client
+            tk.Label(self.client_info_frame, text="Informations du nouveau client", 
+                    font=("Roboto", 16, "bold"), bg="white", anchor="w").pack(anchor="w", pady=(0, 15))
+            
+            # Ligne avec Nom et Contact
+            info_row = tk.Frame(self.client_info_frame, bg="white")
+            info_row.pack(fill="x", pady=(0, 15))
+            info_row.columnconfigure(0, weight=1)
+            info_row.columnconfigure(1, weight=1)
+            
+            # Nom
+            nom_frame = tk.Frame(info_row, bg="white")
+            nom_frame.grid(row=0, column=0, sticky="ew", padx=(0, 10))
+            tk.Label(nom_frame, text="Nom", font=("Roboto", 10, "bold"), bg="white").pack(anchor="w")
+            nom_entry = tk.Entry(nom_frame, font=("Roboto", 10), relief="solid", bd=1)
+            nom_entry.pack(fill="x", pady=(5, 0))
+            nom_entry.config(fg="black")
+            
+            # Contact
+            contact_frame = tk.Frame(info_row, bg="white")
+            contact_frame.grid(row=0, column=1, sticky="ew", padx=(10, 0))
+            tk.Label(contact_frame, text="Contact", font=("Roboto", 10, "bold"), bg="white").pack(anchor="w")
+            contact_entry = tk.Entry(contact_frame, font=("Roboto", 10), relief="solid", bd=1)
+            contact_entry.pack(fill="x", pady=(5, 0))
+            contact_entry.config(fg="black")
+            
+            # IFU
+            ifu_frame = tk.Frame(self.client_info_frame, bg="white")
+            ifu_frame.pack(fill="x", pady=(0, 10))
+            tk.Label(ifu_frame, text="IFU", font=("Roboto", 10, "bold"), bg="white").pack(anchor="w")
+            ifu_entry = tk.Entry(ifu_frame, font=("Roboto", 10), relief="solid", bd=1)
+            ifu_entry.pack(fill="x", pady=(5, 0))
+            
+            ifu_entry.config(fg="black")
+            
+        else:
+            # Sélection client existant
+            tk.Label(self.client_info_frame, text="Sélectionner un client existant", 
+                    font=("Roboto", 16, "bold"), bg="white", anchor="w").pack(anchor="w", pady=(0, 15))
+            
+            # Liste déroulante des clients
+            clients_frame = tk.Frame(self.client_info_frame, bg="white")
+            clients_frame.pack(fill="x")
+            
+            tk.Label(clients_frame, text="Client", font=("Roboto", 10, "bold"), bg="white").pack(anchor="w")
+            
+            # Simule une liste déroulante (combobox)
+            client_var = tk.StringVar(value="Sélectionner un client...")
+            client_menu = tk.OptionMenu(clients_frame, client_var, 
+                                    "Entreprise ABC", "Société XYZ", "Sarl Martin")
+            client_menu.config(font=("Roboto", 10), relief="solid", bd=1, bg="white")
+            client_menu.pack(fill="x", pady=(5, 0))
+
+    def update_client_form(self, parent):
+        """Met à jour le formulaire client quand le type change"""
+        self.create_client_form()
 
     def productMotion(self, parent):
         frame1 = tk.Frame(parent,background="#F5F5F5")
         frame1.pack(fill='x')
         tk.Label(frame1,text='Ajouter un produit', font=('Roboto', 20, 'bold'),
-                 background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
+                    background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
         frame2 = tk.Frame(parent,background="#F5F5F5")
         frame2.pack(fill='x')
         tk.Label(frame2,text='Ajoutez un nouveau produit à votre catalogue', font=('Roboto', 12, 'bold'),
-                 background='#F5F5F5', foreground='gray').pack(side='left')
-        
+                    background='#F5F5F5', foreground='gray').pack(side='left')
+            
         frame3 = tk.Frame(parent,background="#F5F5F5")
         frame3.pack(fill='x',padx=20,pady=20)
         form_frame = tk.Frame(frame3, bg="white", padx=20, pady=20, highlightbackground="#CCC", highlightthickness=1)
         form_frame.pack(pady=30, padx=30, fill="both")
 
-        #  Titre
+            #  Titre
         titre = tk.Label(form_frame, text="Nouveau produit", font=("Roboto", 16, "bold"), bg="white", anchor="w")
         titre.pack(anchor="w")
 
         soustitre = tk.Label(form_frame, text="Remplissez les informations du produit", font=("Roboto", 10),
-                            bg="white", fg="gray", pady=10)
+                                bg="white", fg="gray", pady=10)
         soustitre.pack(anchor="w")
 
-        # Code produit 
+            # Code produit 
         code_label = tk.Label(form_frame, text="Code produit", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         code_label.pack(anchor="w", pady=(5, 0))
 
         code_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
         code_input.pack(fill='x', pady=(0, 10))
 
-        # Libellé 
+            # Libellé 
         libelle_label = tk.Label(form_frame, text="Libellé", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         libelle_label.pack(anchor="w", pady=(5, 0))
 
         libelle_input = tk.Text(form_frame, height=1, font=("Roboto", 10), bd=1, relief="solid")
         libelle_input.pack(fill='x', pady=(0, 10))
 
-        # Prix unitaire
+            # Prix unitaire
         prix_label = tk.Label(form_frame, text="Prix unitaire", font=("Roboto", 9, "bold"), bg="white", anchor="w")
         prix_label.pack(anchor="w", pady=(5, 0))
 
@@ -370,4 +583,4 @@ class myInterface:
     def _unbind_from_mousewheel(self, canvas):
         canvas.unbind_all("<MouseWheel>")
 
-myInterface()
+FacturationApp()
