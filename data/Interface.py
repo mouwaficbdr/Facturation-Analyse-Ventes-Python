@@ -195,17 +195,17 @@ class FacturationApp:
                 'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
             },
             {
-                'content':'Produits',
+                'content':'Cartes de réductions',
                 'function': lambda: self.renderFileContent(frame4, 'Liste des cartes de réductions', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
             }
         ]
 
         for i in range(3):
-            btn = tk.Button(frame3, text='Client', bg=color_set['buttonsbg'], fg='black', font=('Roboto', 12), relief='raised', pady=10, padx=5, cursor='hand2', command=btnManager[i]['function'] )
+            btn = tk.Button(frame3, text=btnManager[i]['content'], bg=color_set['buttonsbg'], fg='black', font=('Roboto', 12), relief='raised', pady=10, padx=5, cursor='hand2', command=btnManager[i]['function'] )
             btn.grid(row=0, column=i, sticky="nsew")
 
         
-        frame4.pack(anchor='center')
+        frame4.pack( fill='x')
 
         tk.Label(frame4, text="Cliquez sur un button pour voir le contenu du fichier correspondant.", font=('Roboto', 15, 'bold'),
         foreground='black').pack(fill='x')
@@ -231,12 +231,18 @@ class FacturationApp:
         headerZone.pack(fill='x', anchor='w')
 
         tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
+        headerZone=tk.Frame(starterFrame, pady=10)
+        headerZone.pack(fill='x', anchor='w')
+
+        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
 
         frame=tk.Frame(starterFrame, pady=10)
+        frame.pack(fill='x', anchor='w')
         frame.pack(fill='x', anchor='w')
 
         for i in range(len(header)):
             frame.grid_columnconfigure(i, weight=1)
+            tk.Label(frame, text=header[i], foreground='gray', pady=10, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
             tk.Label(frame, text=header[i], foreground='gray', pady=10, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
 
         for i in range(len(content)):
