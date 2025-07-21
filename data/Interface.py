@@ -169,7 +169,7 @@ class FacturationApp:
         frame2=tk.Frame(parent, background='#F5F5F5')
         frame2.pack(fill='x')
         tk.Label(frame2, text='Consultez vos clients, produits et cartes de réductions.', font=('Roboto', 10),
-        foreground='gray').pack(side='left')
+        foreground='gray',bg='white').pack(side='left')
 
         frame3 = tk.Frame(parent, pady=20)
         frame3.pack(fill="x")  # Le conteneur prend toute la largeur
@@ -227,14 +227,17 @@ class FacturationApp:
             tk.Label(starterFrame, text='Aucun contenu.', foreground='gray', pady=5, font=('Roboto', 20, 'bold')).pack(anchor='center')
             return;
 
-        tk.Label(starterFrame, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10).pack(side='left')
+        headerZone=tk.Frame(starterFrame, pady=10)
+        headerZone.pack(fill='x', anchor='w')
+
+        tk.Label(headerZone, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10, anchor='w', justify='left').pack(fill='x')
 
         frame=tk.Frame(starterFrame, pady=10)
-        frame.pack(flll='x')
+        frame.pack(fill='x', anchor='w')
 
         for i in range(len(header)):
             frame.grid_columnconfigure(i, weight=1)
-            tk.Label(frame, text=header[i], foreground='gray', pady=5, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
+            tk.Label(frame, text=header[i], foreground='gray', pady=10, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
 
         for i in range(len(content)):
             for j in range(4):
