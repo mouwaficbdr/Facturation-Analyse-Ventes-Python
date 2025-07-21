@@ -23,3 +23,7 @@ __pycache__/
 .vscode/settings.json
 .vscode/tasks.json
 .vscode/launch.json
+
+
+# Fichiers de statistiques
+exports/stats/
