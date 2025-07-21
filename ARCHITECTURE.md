@@ -15,7 +15,7 @@ Facturation-Analyse-Ventes-Python/
 │ ├── produit.py(exemple)
 │ ├── facture.py(exemple)
 │ └── reduction.py(exemple)
-├── services/ # Traitements transversaux (PDF, Excel, génération numéro)
+├── utils/ # Fonctions utilitaires
 │ ├── excel_service.py(exemple)
 │ ├── pdf_service.py(exemple)
 │ └── utils.py(exemple)
@@ -36,14 +36,6 @@ controllers/ : logique fonctionnelle liée à chaque "ressource" (client, produi
 
 models/ : classes représentant les entités (Client, Produit...), ou simples fonctions de mapping.
 
-services/ :
-
-excel_service.py : ouverture/lecture/écriture des fichiers Excel avec pandas, openpyxl.
-
-pdf_service.py : création des PDF avec fpdf, reportlab, ou autre.
-
-utils.py : fonctions utilitaires : conversion nombre → lettres, génération d’ID, calculs divers.
-
-data/ : répertoire des fichiers d’entrée.
+utils/ : fonctions utilitaires
 
 exports/ : factures PDF générées, historiques éventuels.
