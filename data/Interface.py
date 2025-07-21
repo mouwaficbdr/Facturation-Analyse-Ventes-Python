@@ -7,7 +7,7 @@ class FacturationApp:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Application de Facturation")
-        self.root.geometry("1000x600")
+        self.root.geometry("1100x700")
         self.root.resizable(False, False)
 
         self.bodyFrame = tk.Frame(self.root, bg="#F5F5F5", padx=15, pady=15)
@@ -36,7 +36,7 @@ class FacturationApp:
 
         self.create_sidebar()
         self.create_board_container()
-        self.show_section(self.StatisquesMotion)  
+        self.show_section(self.historyMotion)  
 
     def create_sidebar(self):
         sidebar = tk.Frame(self.bodyFrame, width=230, background="#F5F5F5")
@@ -141,20 +141,81 @@ class FacturationApp:
             number_label.pack(anchor='ne')
 
     def historyMotion(self,parent):
-        frame1 = tk.Frame(parent,background="#F5F5F5")
+        frame1 = tk.Frame(parent, background="#F5F5F5")
         frame1.pack(fill='x')
-        tk.Label(frame1,text='Historiques des ventes', font=('Roboto', 20, 'bold'),
+        tk.Label(frame1, text='Historiques des ventes', font=('Roboto', 20, 'bold'),
                  background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
-        frame2 = tk.Frame(parent,background="#F5F5F5")
+        frame2 = tk.Frame(parent, background="#F5F5F5")
         frame2.pack(fill='x')
-        tk.Label(frame2,text="Observez ici l'historique des ventes effectuées", font=('Roboto', 12, 'bold'),
+        tk.Label(frame2, text="Observez ici l'historique des ventes effectuées", font=('Roboto', 12, 'bold'),
                  background='#F5F5F5', foreground='gray').pack(side='left')
-        
-        frame3 = tk.Frame(parent,bg="white",padx=20,pady=10)
-        frame3.pack(fill='both')
 
-        historyMenu =[ "" ]
-        
+        # Conteneur principal blanc, occupe tout l'espace disponible
+        frame3 = tk.Frame(parent, bg="white", padx=0, pady=0)
+        frame3.pack(fill='both', expand=True, padx=10, pady=10)
+
+        # En-têtes de colonnes
+        historyMenu = [
+            "numero_facture", "date", "code_client", "nom_client", "produits",
+            "quantites", "prix_unitaire", "total_ht", "remise", "tva", "total_ttc"
+        ]
+        headers = [
+            "N° Facture", "Date", "Code Client", "Nom Client", "Produits",
+            "Quantités", "Prix Unitaire", "Total HT", "Remise", "TVA", "Total TTC"
+        ]
+
+        # Exemple de données
+        historyStats = [
+            {
+                'numero_facture': "POO123",
+                'date': "2025-07-21",
+                'code_client': "C001",
+                'nom_client': "Big mum",
+                'produits': 'gâteau',
+                'quantites': 5,
+                'prix_unitaire': 500,
+                'total_ht': 2500,
+                'remise': "0%",
+                'tva': "18%",
+                'total_ttc': 2950
+            },
+            {
+                'numero_facture': "POO124",
+                'date': "2025-07-20",
+                'code_client': "C002",
+                'nom_client': "Luffy",
+                'produits': 'bonbon',
+                'quantites': 10,
+                'prix_unitaire': 100,
+                'total_ht': 1000,
+                'remise': "5%",
+                'tva': "18%",
+                'total_ttc': 1113
+            }
+        ]
+
+        # Table
+        table = tk.Frame(frame3, bg='white')
+        table.pack(fill='both', expand=True)
+
+        # Affichage des en-têtes
+        for col, header in enumerate(headers):
+            tk.Label(table, text=header, font=('Roboto', 10, 'bold'),
+                     bg='white', fg='gray', padx=8, pady=6, anchor='w').grid(row=0, column=col, sticky='nsew')
+
+        # Ligne de séparation
+        tk.Frame(table, height=1, bg='#ddd').grid(row=1, column=0, columnspan=len(headers), sticky='ew', pady=(2, 5))
+
+        # Affichage des lignes de données
+        for row_index, row in enumerate(historyStats, start=2):
+            for col_index, key in enumerate(historyMenu):
+                value = row.get(key, "")
+                tk.Label(table, text=value, font=('Roboto', 10),
+                         bg='white', fg='black', padx=8, pady=4, anchor='w').grid(row=row_index, column=col_index, sticky='nsew')
+
+        # Ajustement des colonnes pour un affichage responsive
+        for col in range(len(headers)):
+            table.grid_columnconfigure(col, weight=1)
 
     def fileMotion(self, parent):
 
@@ -172,7 +233,7 @@ class FacturationApp:
         foreground='gray',bg='#F5F5F5').pack(side='left')
 
         frame3 = tk.Frame(parent, pady=20,bg='#F5F5F5')
-        frame3.pack(fill="x")  # Le conteneur prend toute la largeur
+        frame3.pack(fill="x")
 
         frame4 = tk.Frame(parent, pady=40)
 
