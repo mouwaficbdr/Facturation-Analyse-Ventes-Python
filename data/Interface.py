@@ -1,4 +1,6 @@
+from multiprocessing.connection import Client
 import tkinter as tk
+from tkinter.font import BOLD
 
 class FacturationApp:
 
@@ -155,8 +157,88 @@ class FacturationApp:
         
 
     def fileMotion(self, parent):
-        tk.Label(parent, text='This is the file consulting section', font=('Roboto', 20, 'bold'),
-                 background='#F5F5F5', foreground='black', width=100).pack()
+
+        color_set={
+            'buttonsbg':'#c1c1c1'
+        }
+        frame1=tk.Frame(parent, background='#F5F5F5')
+        frame1.pack(fill='x')
+        tk.Label(frame1, text='Consultation des données', font=('Roboto', 20, 'bold'),
+        background='#F5F5F5', foreground='black').pack(side='left')
+
+        frame2=tk.Frame(parent, background='#F5F5F5')
+        frame2.pack(fill='x')
+        tk.Label(frame2, text='Consultez vos clients, produits et cartes de réductions.', font=('Roboto', 10),
+        foreground='gray').pack(side='left')
+
+        frame3 = tk.Frame(parent, pady=20)
+        frame3.pack(fill="x")  # Le conteneur prend toute la largeur
+
+        frame4 = tk.Frame(parent, pady=40)
+
+        for i in range(3):
+            frame3.grid_columnconfigure(i, weight=1)
+            
+
+        btnManager=[
+            {
+                'content':'Clients',
+                'function': lambda: self.renderFileContent(frame4, 'Liste des clients', ['Code_client', 'Nom', 'Contact', 'IFU'], [{
+                    'Code_client': 1,
+                    'Nom': 'Blaise',
+                    'Contact': 5425216,
+                    'IFU': 785623
+                }])
+            },
+            {
+                'content':'Produits',
+                'function': lambda: self.renderFileContent(frame4, 'Liste des produits', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
+            },
+            {
+                'content':'Produits',
+                'function': lambda: self.renderFileContent(frame4, 'Liste des cartes de réductions', ['Code_client', 'Nom', 'Contact', 'IFU'], [])
+            }
+        ]
+
+        for i in range(3):
+            btn = tk.Button(frame3, text='Client', bg=color_set['buttonsbg'], fg='black', font=('Roboto', 12), relief='raised', pady=10, padx=5, cursor='hand2', command=btnManager[i]['function'] )
+            btn.grid(row=0, column=i, sticky="nsew")
+
+        
+        frame4.pack(anchor='center')
+
+        tk.Label(frame4, text="Cliquez sur un button pour voir le contenu du fichier correspondant.", font=('Roboto', 15, 'bold'),
+        foreground='black').pack(fill='x')
+        
+
+
+
+    def renderFileContent(self, starterFrame, headerMessage, header,  content):
+
+        for frame in starterFrame.winfo_children():
+            frame.destroy();
+        
+        starterFrame.pack(fill='x')
+
+        if not isinstance(header, list):      
+            return 'Un tableau avec les clés du fichier est attendu.'
+
+        if not isinstance(content, list) or len(content) == 0 :
+            tk.Label(starterFrame, text='Aucun contenu.', foreground='gray', pady=5, font=('Roboto', 20, 'bold')).pack(anchor='center')
+            return;
+
+        tk.Label(starterFrame, text=headerMessage, font=('Roboto', 20 , 'bold'), foreground='black', pady=10).pack(side='left')
+
+        frame=tk.Frame(starterFrame, pady=10)
+        frame.pack(flll='x')
+
+        for i in range(len(header)):
+            frame.grid_columnconfigure(i, weight=1)
+            tk.Label(frame, text=header[i], foreground='gray', pady=5, font=('Roboto', 12)).grid(row=0, column=i, sticky='nsew')
+
+        for i in range(len(content)):
+            for j in range(4):
+                tk.Label(frame, text=content[i][header[j]], foreground='black', pady=5, font=('Roboto', 15)).grid(row=i+1, column=j, sticky='nsew')
 
     def factureMotion(self, parent):
         # Variables pour gérer l'état des radio buttons et des champs
