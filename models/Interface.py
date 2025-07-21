@@ -6,12 +6,6 @@ from tkinter import messagebox
 from clients_model import Client
 from statistics_models import StatisticsService
 
-statis = StatisticsService(
-    'exports/historique_factures.xlsx',
-    'data/Clients.xlsx',
-    'data/Produits.xlsx',
-    'data/CartesReduction.xlsx'
-)
 
 
 class FacturationApp:
@@ -111,6 +105,7 @@ class FacturationApp:
 
     # Fonctions à implémenter dans la scroll_frame
     def boardMotion(self, parent):
+
         frame1 = tk.Frame(parent,background="#F5F5F5")
         frame1.pack(fill='x')
         tk.Label(frame1,text='Tableau de bord', font=('Roboto', 20, 'bold'),
@@ -132,6 +127,13 @@ class FacturationApp:
 
         underframe.rowconfigure(0,weight=1)
         underframe.rowconfigure(1,weight=1)
+
+        statis = StatisticsService(
+        'exports/historique_factures.xlsx',
+        'data/Clients.xlsx',
+        'data/Produits.xlsx',
+        'data/CartesReduction.xlsx'
+)
 
         stats = {
             'Total clients' :statis.total_clients(),
@@ -810,11 +812,17 @@ class FacturationApp:
         frame3 = tk.Frame(parent,background="#F5F5F5")
         frame3.pack(fill='x',padx=20,pady=20)
 
+        statis = StatisticsService(
+        'exports/historique_factures.xlsx',
+        'data/Clients.xlsx',
+        'data/Produits.xlsx',
+        'data/CartesReduction.xlsx')
+
         # variables de statisques
         salesStats ={
-            'produits le plus vendu' : 'Ordinateur portable',
-            'Meilleur client' : 'Entreprise ABC',
-            "Chiffre d'affaires total" : '$15,420'
+            'produits le plus vendu' : statis.best_selling_product_name(),
+            'Meilleur client' : statis.best_client_name(),
+            "Chiffre d'affaires total" : statis.best_selling_product_quantity()
         }
 
         for col_index, (label, value) in enumerate(salesStats.items()):
