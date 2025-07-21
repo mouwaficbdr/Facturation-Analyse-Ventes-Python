@@ -69,6 +69,22 @@ class FactureManager:
             return False
 
 
+    def get_factures_client(self, code_client):
+        """
+        Retourne l'historique des factures pour un client spécifique sous forme d'une liste de dictionnaires.
+        Si aucune facture n'est trouvée ou en cas d'erreur, retourne une liste vide.
+        """
+        try:
+            df = pd.read_excel(self.INVOICES_FILE)
+            df_client = df[df['code_client'] == code_client]
+            if df_client.empty:
+                return []
+            df_client = df_client.sort_values('date', ascending=False)
+            return df_client.to_dict(orient='records')
+        except Exception as e:
+            print(f"\nErreur lors de la recherche : {str(e)}")
+            return []
+
     def get_historique_complet(self):
         """
         Retourne l'historique complet des factures sous forme d'une liste de dictionnaires.
