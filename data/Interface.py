@@ -48,6 +48,7 @@ class FacturationApp:
             'Consulter un fichier': self.fileMotion,
             'Générer une facture': self.factureMotion,
             'Ajouter un produit': self.productMotion,
+            'historique' : self.historyMotion,
             'Statisques': self.StatisquesMotion,
         }
 
@@ -136,6 +137,22 @@ class FacturationApp:
             # Stat number
             number_label = tk.Label(underframe, text=value, bg='white', font=('Roboto', 16, 'bold'))
             number_label.pack(anchor='ne')
+
+    def historyMotion(self,parent):
+        frame1 = tk.Frame(parent,background="#F5F5F5")
+        frame1.pack(fill='x')
+        tk.Label(frame1,text='Historiques des ventes', font=('Roboto', 20, 'bold'),
+                 background='#F5F5F5', foreground='#1C1C1C').pack(side='left')
+        frame2 = tk.Frame(parent,background="#F5F5F5")
+        frame2.pack(fill='x')
+        tk.Label(frame2,text="Observez ici l'historique des ventes effectuées", font=('Roboto', 12, 'bold'),
+                 background='#F5F5F5', foreground='gray').pack(side='left')
+        
+        frame3 = tk.Frame(parent,bg="white",padx=20,pady=10)
+        frame3.pack(fill='both')
+
+        historyMenu =[ "" ]
+        
 
     def fileMotion(self, parent):
         tk.Label(parent, text='This is the file consulting section', font=('Roboto', 20, 'bold'),
